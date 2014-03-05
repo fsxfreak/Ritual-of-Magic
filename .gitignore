@@ -13,4 +13,4 @@
 *.a
 
 #Unity
-*.meta
+*.js.meta
