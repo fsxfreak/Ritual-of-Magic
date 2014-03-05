@@ -1,9 +1,0 @@
-fileFormatVersion: 2
-guid: 3ba8da1f3ad4f491bb6f591c3f725958
-MonoImporter:
-  serializedVersion: 2
-  defaultReferences:
-  - gameEngine: {fileID: 100000, guid: baae16dbc43374da895b64220e7ff623, type: 2}
-  executionOrder: 0
-  icon: {instanceID: 0}
-  userData: 
