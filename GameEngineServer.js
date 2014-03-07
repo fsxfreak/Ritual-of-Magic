@@ -2,104 +2,116 @@
 @script RequireComponent(NetworkView)
 
 /**
-	Should keep track of the relevant gamestates that affect
-	the scoring. See PointValues for the values should be checking for.
-		Put the game state in static state class that contains 
-		boolean for each of the states.
+    Should keep track of the relevant gamestates that affect
+    the scoring. See PointValues for the values should be checking for.
+        Put the game state in static state class that contains 
+        boolean for each of the states.
 */
 
 public class GameEngineServer extends MonoBehaviour
 {
-	public var networkedObject : GameObject;
+    public var networkedObject : GameObject;
 
-	private var players : Hashtable;
-	private var fpcPlayers : Array;
-	private var hasControllersAll : boolean;
-	private var player : GameObject;
+    private var players : Hashtable;
+    private var fpcPlayers : Array;
 
-	public function Start()
-	{
-		if (Network.isServer)
-		{
-			hasControllersAll = false;
-			players = new Hashtable();
-			fpcPlayers = new Array();
+    private var hasControllersAll : boolean;
 
-			//label each player false if they have not connected yet
-			for (var player : NetworkPlayer in Network.connections)
-			{
-				players.Add(player, false);
-				Network.SetReceivingEnabled(player, 0, true);
-				Network.SetSendingEnabled(player, 0, true);
-			}
+    private var player : GameObject;
 
-			GameObject.Destroy(GameObject.Find("Main Camera"));
-		}
-	}
+    public function Start()
+    {
+        if (Network.isServer)
+        {
+            hasControllersAll = false;
+            players = new Hashtable();
+            fpcPlayers = new Array();
 
-	public function Update()
-	{
-		if (Network.isServer)
-		{
-			if (checkAllPlayersConnected() && !hasControllersAll)
-			{
-				player = initializePlayer();	//a player for myself
-				hasControllersAll = true;
-			}
+            //label each player false if they have not connected yet
+            for (var player : NetworkPlayer in Network.connections)
+            {
+                players.Add(player, false);
+                Network.SetReceivingEnabled(player, 0, true);
+                Network.SetSendingEnabled(player, 0, true);
+            }
 
-			updateWorldState();
-		}
-			
-	}
+            GameObject.Destroy(GameObject.Find("Main Camera"));
+        }
+    }
 
-	/**
-		Keep track of all of our artifacts, who has what, and what's
-		going on
-	*/
-	private function updateWorldState()
-	{
-		var players : GameObject[] = 
-			GameObject.FindGameObjectsWithTag("RitualPlayer");
+    public function Update()
+    {
+        if (Network.isServer)
+        {
+            if (checkAllPlayersConnected() && !hasControllersAll)
+            {
+                player = initializePlayer();    //a player for myself
+                hasControllersAll = true;
+            }
 
-		for (var player : GameObject in players)
-		{
-			/*Debug.Log(
-				player.name + " "
-			  + player.GetComponent(PlayerMono).getPlayerInfo()
-					.influences.getInfluenceFor(Artifact.SCEPTER)
-			);*/
-		}
-	}
+            updateWorldState();
+        }
+            
+    }
 
-	private function initializePlayer() : GameObject
-	{
-		return Network.Instantiate(networkedObject 
-								 , Vector3(
-										Random.Range(4, 12),
-										6,
-										Random.Range(4, 12)
-								 )
-								 , Quaternion()
-								 , 0
-					);
-	}
+    /**
+        Keep track of all of our artifacts, who has what, and what's
+        going on
+    */
+    private function updateWorldState()
+    {
+        var players : GameObject[] = 
+            GameObject.FindGameObjectsWithTag("RitualPlayer");
 
-	private function checkAllPlayersConnected() : boolean
-	{
-		if (!players.ContainsValue(false) && players.Count > 0)
-		{
-			return true;
-		}
-		if (players.ContainsValue(true))
-		{
+        for (var player : GameObject in players)
+        {
+            /*Debug.Log(
+                player.name + " "
+              + player.GetComponent(PlayerMono).getPlayerInfo()
+                    .influences.getInfluenceFor(Artifact.SCEPTER)
+            );*/
+        }
+    }
 
-		}
-		return false;
-	}
+    private function initializePlayer() : GameObject
+    {
+        return Network.Instantiate(networkedObject 
+                                 , Vector3(
+                                        Random.Range(4, 12),
+                                        6,
+                                        Random.Range(4, 12)
+                                   )
+                                 , Quaternion()
+                                 , 0
+                    );
+    }
 
-	@RPC
-	public function receiveClientLoaded(player : NetworkPlayer)
-	{
-		players[player] = true;
-	}
+    private function checkAllPlayersConnected() : boolean
+    {
+        if (!players.ContainsValue(false) && players.Count > 0)
+        {
+            return true;
+        }
+        if (players.ContainsValue(true))
+        {
+
+        }
+        return false;
+    }
+
+    @RPC
+    public function receiveClientLoaded(player : NetworkPlayer)
+    {
+        players[player] = true;
+    }
+
+    @RPC
+    public function atteptInfluence(from : PlayerMono, to : PlayerMono
+                                  , artifact : Artifact)
+    {
+        //TODO: Get influence of each player, calculate chance to steal the item
+        //report to PlayerMono gotArtifact or lostArtifact
+        //also report hasInfluenced
+        //also update RitualState
+    }
 }
