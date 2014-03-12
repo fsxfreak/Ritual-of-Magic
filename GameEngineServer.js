@@ -107,11 +107,64 @@ public class GameEngineServer extends MonoBehaviour
 
     @RPC
     public function atteptInfluence(from : PlayerMono, to : PlayerMono
-                                  , artifact : Artifact)
+                                  , artifact : Artifact
+                                  , player : NetworkPlayer
+                                  , toPlayer : NetworkPlayer)
     {
-        //TODO: Get influence of each player, calculate chance to steal the item
-        //report to PlayerMono gotArtifact or lostArtifact
-        //also report hasInfluenced
-        //also update RitualState
+        var fromInfluence : float = 
+            from.playerInfo.influences.getInfluenceFor(artifact);
+        var toInfluence : float = 
+            to.playerInfo.influences.getInfluenceFor(artifact);
+
+        var rollNeededForSuccess : float = toInfluence - fromInfluence;
+        rollNeededForSuccess = rollNeededForSuccess < 0 
+                                    ? 0 
+                                    : rollNeededForSuccess;
+
+        var roll : float = Random.value;
+
+        if (roll > rollNeededForSuccess)
+        {
+            from.gameObject.networkView.RPC("hasInfluenced"
+                                          , player
+                                          , true);
+            from.gameObject.networkView.RPC("gotArtifact"
+                                          , player
+                                          , artifact);
+
+            //TODO: Somehow need to get toPlayer : NetworkPlayer when raycast hit
+            //to.gameObject.networkView.RPC("lostArtifact"
+            //                            , toPlayer
+            //                            , artifact);
+
+            switch (from.playerInfo.race)
+            {
+            case Race.EAGLE_LORD:
+                //RitualState.EAGLE_RULES_SORRELL = true;
+                //TODO: need to randomly assign each artifact to a specific country
+                //another switch in here (3 levels of conditionals, sorry torvalds)
+                break;
+            case Race.WOLF_MAGE:
+                break;
+            case Race.DRAGON_MASTER:
+                break;
+            }
+
+            switch (to.playerInfo.race)
+            {
+            case Race.EAGLE_LORD:
+                break;
+            case Race.WOLF_MAGE:
+                break;
+            case Race.DRAGON_MASTER:
+                break
+            }
+        }
+        else
+        {
+            from.gameObject.networkView.RPC("hasInfluenced"
+                                          , player
+                                          , false);
+        }
     }
 }

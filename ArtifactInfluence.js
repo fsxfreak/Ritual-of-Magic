@@ -17,7 +17,7 @@ public class ArtifactInfluence
         amulet  = new Influence(0, Artifact.AMULET);
     }
 
-    public function getInfluenceFor(artifact : Artifact) : int
+    public function getInfluenceFor(artifact : Artifact) : float
     {
         switch (artifact)
         {
@@ -30,45 +30,18 @@ public class ArtifactInfluence
         }
     }
 
-    /*
-     * If increase is set to true, will add one to influence.
-     */
     public function changeInfluenceFor(artifact : Artifact, amount : float)
     {
-        if (amount > 0) 
-            increaseInfluenceFor(artifact, amount);
-        else
-            decreaseInfluenceFor(artifact, amount);
-    }
-
-    private function increaseInfluenceFor(artifact : Artifact, amount : float)
-    {
         switch (artifact)
         {
         case Artifact.CROWN:
-            crown.increaseInfluence(amount);
+            crown.changeInfluence(amount);
             break;
         case Artifact.SCEPTER:
-            scepter.increaseInfluence(amount);
+            scepter.changeInfluence(amount);
             break;
         case Artifact.AMULET:
-            amulet.increaseInfluence(amount);
-            break;
-        }
-    }
-
-    private function decreaseInfluenceFor(artifact : Artifact, amount : float)
-    {
-        switch (artifact)
-        {
-        case Artifact.CROWN:
-            crown.decreaseInfluence(amount);
-            break;
-        case Artifact.SCEPTER:
-            scepter.decreaseInfluence(amount);
-            break;
-        case Artifact.AMULET:
-            amulet.decreaseInfluence(amount);
+            amulet.changeInfluence(amount);
             break;
         }
     }

@@ -2,11 +2,13 @@
 
 public class RitualState
 {
+ /* TODO: These are player local, move them to RitualPlayer I think
     public static var CONTROLS_MONSTER        : boolean = false;
     public static var RULES_SORRELL           : boolean = false;
     public static var RULES_MARUS             : boolean = false;
     public static var RULES_KIDA              : boolean = false;
     public static var DIES                    : boolean = false;
+*/
 
     public static var WOLF_CONTROLS_MONSTER   : boolean = false;
     public static var WOLF_RULES_SORRELL      : boolean = false;

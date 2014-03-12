@@ -4,6 +4,10 @@ public class PlayerMono extends MonoBehaviour
 {
     private var playerInfo : RitualPlayer;
 
+    public var crownPrefab : GameObject;
+    public var amuletPrefab : GameObject;
+    public var scepterPrefab : GameObject;
+
     public function Awake()
     {
         playerInfo = new RitualPlayer();
@@ -13,7 +17,7 @@ public class PlayerMono extends MonoBehaviour
 
     public function OnGUI()
     {
-        if (Input.GetKeyDown("tab"))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             Debug.Log("tab pressed");
             //TODO: DISPLAY PLAYER INFORMATION HERE
@@ -23,7 +27,7 @@ public class PlayerMono extends MonoBehaviour
     public function Update()
     {
         //TODO: can only press the fire button every period interval
-        if (Input.GetKeyDown("F"))
+        if (Input.GetKeyDown(KeyCode.F))
         {
             fireInfluenceShot();
         }
@@ -35,7 +39,10 @@ public class PlayerMono extends MonoBehaviour
         //Let player choose which artifact to get
         GameObject.Find("GameEngineServer").networkView
                 .RPC("attemptInfluence", RPCMode.Server
-                   , this.gameObject, this.gameObject/* <--PLACEHOLER OTHER PlayerMono */);
+                   , this, this/* <--PLACEHOLER OTHER PlayerMono */
+                   , Artifact.AMULET/*artifact placeholder*/
+                   , Network.player
+                   , Network.player/*need Network.toPlayer*/);
     }
 
     //Only responsible for transferring artifacts.
@@ -45,14 +52,38 @@ public class PlayerMono extends MonoBehaviour
         switch (artifact)
         {
         case Artifact.CROWN:
-            playerInfo.influences.crown = true;
-            //TODO: For each, do cosmetic
+            playerInfo.influences.hasCrown = true;
+            //TODO: For each, do cosmetic changes on first preson controller
             break;
         case Artifact.SCEPTER:
-            playerInfo.influences.crown = true;
+            playerInfo.influences.hasScepter = true;
+
+            var scepter : GameObject = Network.Instantiate(
+                    scepterPrefab as GameObject,
+                    transform.position,
+                    transform.rotation,
+                    0
+                );
+
+            scepter.transform.parent = this.transform;
+            scepter.transform.localPosition = Vector3(0.5, 1.35, 0);
+            scepter.transform.localEulerAngles = Vector3(0, 90, 90);
+
             break;
         case Artifact.AMULET:
-            playerInfo.influences.crown = true;
+            playerInfo.influences.hasAmulet = true;
+
+            var amulet : GameObject = Network.Instantiate(
+                    amuletPrefab as GameObject,
+                    transform.position,
+                    transform.rotation,
+                    0
+                );
+
+            amulet.transform.parent = this.transform;
+            amulet.transform.localPosition = Vector3(0, -0.25, 0.6);
+            amulet.transform.localEulerAngles = Vector3(0, -90, -60;
+
             break;
         }
     }
@@ -64,13 +95,13 @@ public class PlayerMono extends MonoBehaviour
         switch (artifact)
         {
         case Artifact.CROWN:
-            playerInfo.influences.crown = false;
+            playerInfo.influences.hasCrown = false;
             break;
         case Artifact.SCEPTER:
-            playerInfo.influences.crown = false;
+            playerInfo.influences.hasScepter = false;
             break;
         case Artifact.AMULET:
-            playerInfo.influences.crown = false;
+            playerInfo.influences.hasAmulet = false;
             break;
         }
     }
