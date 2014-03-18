@@ -32,7 +32,9 @@ enum Artifact
 {
     CROWN,
     SCEPTER,
-    AMULET
+    AMULET,
+
+    INVALID
 }
 
 enum Countries

@@ -38,6 +38,7 @@ public class NetworkedFPC extends MonoBehaviour
                     child.gameObject.SetActive(false);
                 }
             }
+            this.gameObject.GetComponent(PlayerMono).enabled = false;
         }
         else
         {
@@ -46,6 +47,7 @@ public class NetworkedFPC extends MonoBehaviour
               + GetComponent(PlayerMono).getPlayerInfo().race + " "
               + GetComponent(PlayerMono).getPlayerInfo().pointValues.
                     MONSTER_BANISHED;
+                    
             networkView.RPC("changeName"
                           , RPCMode.Others
                           , this.gameObject.name);

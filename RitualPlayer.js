@@ -33,12 +33,4 @@ public class RitualPlayer
 
         pointValues = new Points(race);
     }
-
-    public function getHurtFor(artifact :  Artifact, amount : float) 
-    {
-        if (amount > 0)
-            return;
-        
-        influences.changeInfluenceFor(artifact, amount);  
-    }
 }

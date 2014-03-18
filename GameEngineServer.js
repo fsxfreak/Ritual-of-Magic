@@ -106,20 +106,38 @@ public class GameEngineServer extends MonoBehaviour
     }
 
     @RPC
-    public function atteptInfluence(from : PlayerMono, to : PlayerMono
-                                  , artifact : Artifact
-                                  , player : NetworkPlayer
-                                  , toPlayer : NetworkPlayer)
+    public function attemptInfluence(fromName : String, toName : String
+                                   , artifactNum : int)
     {
+        var from : PlayerMono = GameObject.Find(fromName).GetComponent(PlayerMono);
+        var to : PlayerMono = GameObject.Find(toName).GetComponent(PlayerMono);
+
+        var player : NetworkPlayer = from.gameObject.networkView.owner;
+        var toPlayer : NetworkPlayer = from.gameObject.networkView.owner;
+
+        var artifact : Artifact = Artifact.INVALID;
+        switch (artifactNum)
+        {
+        case 0:
+            artifact = Artifact.CROWN;
+            break;
+        case 1:
+            artifact = Artifact.SCEPTER;
+            break;
+        case 2:
+            artifact = Artifact.AMULET;
+            break;
+        }
+
         var fromInfluence : float = 
-            from.playerInfo.influences.getInfluenceFor(artifact);
+            from.getPlayerInfo().influences.getInfluenceFor(artifact);
         var toInfluence : float = 
-            to.playerInfo.influences.getInfluenceFor(artifact);
+            to.getPlayerInfo().influences.getInfluenceFor(artifact);
 
         var rollNeededForSuccess : float = toInfluence - fromInfluence;
         rollNeededForSuccess = rollNeededForSuccess < 0 
-                                    ? 0 
-                                    : rollNeededForSuccess;
+                             ? 0 
+                             : rollNeededForSuccess;
 
         var roll : float = Random.value;
 
@@ -127,17 +145,17 @@ public class GameEngineServer extends MonoBehaviour
         {
             from.gameObject.networkView.RPC("hasInfluenced"
                                           , player
-                                          , true);
+                                          , "true");
             from.gameObject.networkView.RPC("gotArtifact"
                                           , player
-                                          , artifact);
+                                          , artifactNum);
 
             //TODO: Somehow need to get toPlayer : NetworkPlayer when raycast hit
             //to.gameObject.networkView.RPC("lostArtifact"
             //                            , toPlayer
             //                            , artifact);
 
-            switch (from.playerInfo.race)
+            switch (from.getPlayerInfo().race)
             {
             case Race.EAGLE_LORD:
                 //RitualState.EAGLE_RULES_SORRELL = true;
@@ -150,14 +168,14 @@ public class GameEngineServer extends MonoBehaviour
                 break;
             }
 
-            switch (to.playerInfo.race)
+            switch (to.getPlayerInfo().race)
             {
             case Race.EAGLE_LORD:
                 break;
             case Race.WOLF_MAGE:
                 break;
             case Race.DRAGON_MASTER:
-                break
+                break;
             }
         }
         else
