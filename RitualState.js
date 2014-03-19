@@ -2,13 +2,9 @@
 
 public class RitualState
 {
- /* TODO: These are player local, move them to RitualPlayer I think
-    public static var CONTROLS_MONSTER        : boolean = false;
-    public static var RULES_SORRELL           : boolean = false;
-    public static var RULES_MARUS             : boolean = false;
-    public static var RULES_KIDA              : boolean = false;
-    public static var DIES                    : boolean = false;
-*/
+    public static var ARTIFACT_SORRELL        : Artifact = Artifact.INVALID;
+    public static var ARTIFACT_MARUS          : Artifact = Artifact.INVALID;
+    public static var ARTIFACT_KIDA           : Artifact = Artifact.INVALID;
 
     public static var WOLF_CONTROLS_MONSTER   : boolean = false;
     public static var WOLF_RULES_SORRELL      : boolean = false;
@@ -32,4 +28,17 @@ public class RitualState
     public static var AT_LEAST_ONE_COUNTRY_NO_RULER : boolean = true;
     public static var NOBODY_DIES             : boolean = true;
     public static var MONSTER_RAMPAGES_COUNTRY: boolean = false;
+
+    public static function getArtifactForCountry(country : String) : Artifact
+    {
+        switch (country)
+        {
+        case "SORRELL":
+            return ARTIFACT_SORRELL;
+        case "MARUS":
+            return ARTIFACT_MARUS;
+        case "KIDA":
+            return ARTIFACT_KIDA;
+        }
+    }
 }

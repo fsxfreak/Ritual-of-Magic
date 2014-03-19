@@ -36,6 +36,41 @@ public class GameEngineServer extends MonoBehaviour
             }
 
             GameObject.Destroy(GameObject.Find("Main Camera"));
+
+            //Generate the races that control each country
+            var randomNumbers : int[] = new int[3];
+            randomNumbers[0] 
+                = randomNumbers[1] 
+                = randomNumbers[2] 
+                = Random.Range(0,2);
+            while (randomNumbers[0] == randomNumbers[1])
+                randomNumbers[1] = Random.Range(0, 2);
+            while (randomNumbers[0] == randomNumbers[2] 
+                && randomNumbers[1] == randomNumbers[2])
+                randomNumbers[2] = Random.Range(0, 2);
+
+            var randomArtifacts : Artifact[] = new Artifact[3];
+            for (var i : int = 0; i < 3; i++)
+            {
+                switch(randomNumbers[i])
+                {
+                case 0:
+                    randomArtifacts[i] = Artifact.CROWN;
+                    break;
+                case 1:
+                    randomArtifacts[i] = Artifact.SCEPTER;
+                    break;
+                case 2:
+                    randomArtifacts[i] = Artifact.AMULET;
+                    break;
+                default:
+                    randomArtifacts[i] = Artifact.INVALID;
+                }
+            }
+
+            RitualState.ARTIFACT_SORRELL = randomArtifacts[0];
+            RitualState.ARTIFACT_MARUS = randomArtifacts[1];
+            RitualState.ARTIFACT_KIDA = randomArtifacts[2];
         }
     }
 
@@ -65,11 +100,7 @@ public class GameEngineServer extends MonoBehaviour
 
         for (var player : GameObject in players)
         {
-            /*Debug.Log(
-                player.name + " "
-              + player.GetComponent(PlayerMono).getPlayerInfo()
-                    .influences.getInfluenceFor(Artifact.SCEPTER)
-            );*/
+            
         }
     }
 
@@ -105,6 +136,210 @@ public class GameEngineServer extends MonoBehaviour
         players[player] = true;
     }
 
+    private function updateRitualStateArtifactRuling(race : Race
+                                                   , artifact : Artifact)
+    {
+        //worst piece of code ever
+        switch (artifact)
+        {
+        case Artifact.CROWN:
+            if (RitualState.ARTIFACT_SORRELL == Artifact.CROWN)
+            {
+                switch (race)
+                {
+                case Race.EAGLE_LORD:
+                    RitualState.EAGLE_RULES_SORRELL = true;
+                    RitualState.WOLF_RULES_SORRELL = false;
+                    RitualState.DRAGON_RULES_SORRELL = false;
+                    break;
+                case Race.WOLF_MAGE:
+                    RitualState.EAGLE_RULES_SORRELL = false;
+                    RitualState.WOLF_RULES_SORRELL = true;
+                    RitualState.DRAGON_RULES_SORRELL = false;
+                    break;
+                case Race.DRAGON_MASTER:
+                    RitualState.EAGLE_RULES_SORRELL = false;
+                    RitualState.WOLF_RULES_SORRELL = false;
+                    RitualState.DRAGON_RULES_SORRELL = true;
+                    break;
+                }
+            }
+            else if (RitualState.ARTIFACT_MARUS == Artifact.CROWN)
+            {
+                switch (race)
+                {
+                case Race.EAGLE_LORD:
+                    RitualState.EAGLE_RULES_MARUS = true;
+                    RitualState.WOLF_RULES_MARUS = false;
+                    RitualState.DRAGON_RULES_MARUS = false;
+                    break;
+                case Race.WOLF_MAGE:
+                    RitualState.EAGLE_RULES_MARUS = false;
+                    RitualState.WOLF_RULES_MARUS = true;
+                    RitualState.DRAGON_RULES_MARUS = false;
+                    break;
+                case Race.DRAGON_MASTER:
+                    RitualState.EAGLE_RULES_MARUS = false;
+                    RitualState.WOLF_RULES_MARUS = false;
+                    RitualState.DRAGON_RULES_MARUS = true;
+                    break;
+                }
+            }
+            else if (RitualSTate.ARTIFACT_KIDA == Artifact.CROWN)
+            {
+                switch (race)
+                {
+                case Race.EAGLE_LORD:
+                    RitualState.EAGLE_RULES_KIDA = true;
+                    RitualState.WOLF_RULES_KIDA = false;
+                    RitualState.DRAGON_RULES_KIDA = false;
+                    break;
+                case Race.WOLF_MAGE:
+                    RitualState.EAGLE_RULES_KIDA = false;
+                    RitualState.WOLF_RULES_KIDA = true;
+                    RitualState.DRAGON_RULES_KIDA = false;
+                    break;
+                case Race.DRAGON_MASTER:
+                    RitualState.EAGLE_RULES_KIDA = false;
+                    RitualState.WOLF_RULES_KIDA = false;
+                    RitualState.DRAGON_RULES_KIDA = true;
+                    break;
+                }
+            }
+            break;
+        case Artifact.SCEPTER:
+            if (RitualState.ARTIFACT_SORRELL == Artifact.SCEPTER)
+            {
+                switch (race)
+                {
+                case Race.EAGLE_LORD:
+                    RitualState.EAGLE_RULES_SORRELL = true;
+                    RitualState.WOLF_RULES_SORRELL = false;
+                    RitualState.DRAGON_RULES_SORRELL = false;
+                    break;
+                case Race.WOLF_MAGE:
+                    RitualState.EAGLE_RULES_SORRELL = false;
+                    RitualState.WOLF_RULES_SORRELL = true;
+                    RitualState.DRAGON_RULES_SORRELL = false;
+                    break;
+                case Race.DRAGON_MASTER:
+                    RitualState.EAGLE_RULES_SORRELL = false;
+                    RitualState.WOLF_RULES_SORRELL = false;
+                    RitualState.DRAGON_RULES_SORRELL = true;
+                    break;
+                }
+            }
+            else if (RitualState.ARTIFACT_MARUS == Artifact.SCEPTER)
+            {
+                switch (race)
+                {
+                case Race.EAGLE_LORD:
+                    RitualState.EAGLE_RULES_MARUS = true;
+                    RitualState.WOLF_RULES_MARUS = false;
+                    RitualState.DRAGON_RULES_MARUS = false;
+                    break;
+                case Race.WOLF_MAGE:
+                    RitualState.EAGLE_RULES_MARUS = false;
+                    RitualState.WOLF_RULES_MARUS = true;
+                    RitualState.DRAGON_RULES_MARUS = false;
+                    break;
+                case Race.DRAGON_MASTER:
+                    RitualState.EAGLE_RULES_MARUS = false;
+                    RitualState.WOLF_RULES_MARUS = false;
+                    RitualState.DRAGON_RULES_MARUS = true;
+                    break;
+                }
+            }
+            else if (RitualSTate.ARTIFACT_KIDA == Artifact.SCEPTER)
+            {
+                switch (race)
+                {
+                case Race.EAGLE_LORD:
+                    RitualState.EAGLE_RULES_KIDA = true;
+                    RitualState.WOLF_RULES_KIDA = false;
+                    RitualState.DRAGON_RULES_KIDA = false;
+                    break;
+                case Race.WOLF_MAGE:
+                    RitualState.EAGLE_RULES_KIDA = false;
+                    RitualState.WOLF_RULES_KIDA = true;
+                    RitualState.DRAGON_RULES_KIDA = false;
+                    break;
+                case Race.DRAGON_MASTER:
+                    RitualState.EAGLE_RULES_KIDA = false;
+                    RitualState.WOLF_RULES_KIDA = false;
+                    RitualState.DRAGON_RULES_KIDA = true;
+                    break;
+                }
+            }
+            break;
+        case Artifact.AMULET:
+            if (RitualState.ARTIFACT_SORRELL == Artifact.AMULET)
+            {
+                switch (race)
+                {
+                case Race.EAGLE_LORD:
+                    RitualState.EAGLE_RULES_SORRELL = true;
+                    RitualState.WOLF_RULES_SORRELL = false;
+                    RitualState.DRAGON_RULES_SORRELL = false;
+                    break;
+                case Race.WOLF_MAGE:
+                    RitualState.EAGLE_RULES_SORRELL = false;
+                    RitualState.WOLF_RULES_SORRELL = true;
+                    RitualState.DRAGON_RULES_SORRELL = false;
+                    break;
+                case Race.DRAGON_MASTER:
+                    RitualState.EAGLE_RULES_SORRELL = false;
+                    RitualState.WOLF_RULES_SORRELL = false;
+                    RitualState.DRAGON_RULES_SORRELL = true;
+                    break;
+                }
+            }
+            else if (RitualState.ARTIFACT_MARUS == Artifact.AMULET)
+            {
+                switch (race)
+                {
+                case Race.EAGLE_LORD:
+                    RitualState.EAGLE_RULES_MARUS = true;
+                    RitualState.WOLF_RULES_MARUS = false;
+                    RitualState.DRAGON_RULES_MARUS = false;
+                    break;
+                case Race.WOLF_MAGE:
+                    RitualState.EAGLE_RULES_MARUS = false;
+                    RitualState.WOLF_RULES_MARUS = true;
+                    RitualState.DRAGON_RULES_MARUS = false;
+                    break;
+                case Race.DRAGON_MASTER:
+                    RitualState.EAGLE_RULES_MARUS = false;
+                    RitualState.WOLF_RULES_MARUS = false;
+                    RitualState.DRAGON_RULES_MARUS = true;
+                    break;
+                }
+            }
+            else if (RitualSTate.ARTIFACT_KIDA == Artifact.AMULET)
+            {
+                switch (race)
+                {
+                case Race.EAGLE_LORD:
+                    RitualState.EAGLE_RULES_KIDA = true;
+                    RitualState.WOLF_RULES_KIDA = false;
+                    RitualState.DRAGON_RULES_KIDA = false;
+                    break;
+                case Race.WOLF_MAGE:
+                    RitualState.EAGLE_RULES_KIDA = false;
+                    RitualState.WOLF_RULES_KIDA = true;
+                    RitualState.DRAGON_RULES_KIDA = false;
+                    break;
+                case Race.DRAGON_MASTER:
+                    RitualState.EAGLE_RULES_KIDA = false;
+                    RitualState.WOLF_RULES_KIDA = false;
+                    RitualState.DRAGON_RULES_KIDA = true;
+                    break;
+                }
+            }
+            break;
+        }
+    }
+
     @RPC
     public function attemptInfluence(fromName : String, toName : String
                                    , artifactNum : int)
@@ -121,7 +356,7 @@ public class GameEngineServer extends MonoBehaviour
         case 0:
             artifact = Artifact.CROWN;
             break;
-        case 1:
+        case 1: 
             artifact = Artifact.SCEPTER;
             break;
         case 2:
@@ -149,40 +384,17 @@ public class GameEngineServer extends MonoBehaviour
             from.gameObject.networkView.RPC("gotArtifact"
                                           , player
                                           , artifactNum);
+              to.gameObject.networkView.RPC("lostArtifact"
+                                          , toPlayer
+                                          , artifactNum);
 
-            //TODO: Somehow need to get toPlayer : NetworkPlayer when raycast hit
-            //to.gameObject.networkView.RPC("lostArtifact"
-            //                            , toPlayer
-            //                            , artifact);
-
-            switch (from.getPlayerInfo().race)
-            {
-            case Race.EAGLE_LORD:
-                //RitualState.EAGLE_RULES_SORRELL = true;
-                //TODO: need to randomly assign each artifact to a specific country
-                //another switch in here (3 levels of conditionals, sorry torvalds)
-                break;
-            case Race.WOLF_MAGE:
-                break;
-            case Race.DRAGON_MASTER:
-                break;
-            }
-
-            switch (to.getPlayerInfo().race)
-            {
-            case Race.EAGLE_LORD:
-                break;
-            case Race.WOLF_MAGE:
-                break;
-            case Race.DRAGON_MASTER:
-                break;
-            }
+            updateRitualStateArtifactRuling(from.getPlayerInfo().race, artifact);
         }
         else
         {
             from.gameObject.networkView.RPC("hasInfluenced"
                                           , player
-                                          , false);
+                                          , "false");
         }
     }
 }

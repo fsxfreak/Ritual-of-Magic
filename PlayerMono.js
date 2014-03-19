@@ -190,8 +190,22 @@ public class PlayerMono extends MonoBehaviour
 
     //Only responsible for transferring artifacts.
     @RPC
-    public function lostArtifact(artifact : Artifact)
+    public function lostArtifact(artifactNum : int)
     {
+        var artifact : Artifact = Artifact.INVALID;
+        switch (artifactNum)
+        {
+        case 0:
+            artifact = Artifact.CROWN;
+            break;
+        case 1:
+            artifact = Artifact.SCEPTER;
+            break;
+        case 2:
+            artifact = Artifact.AMULET;
+            break;
+        }
+
         switch (artifact)
         {
         case Artifact.CROWN:
@@ -213,6 +227,7 @@ public class PlayerMono extends MonoBehaviour
     @RPC
     public function hasInfluenced(influenceGet : String)
     {
+        playerInfo.updateStatus();
         if (influenceGet == "true")
         {
             //TODO - Display influence gotten

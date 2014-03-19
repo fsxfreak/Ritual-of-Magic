@@ -4,7 +4,9 @@ enum Race
 {
     EAGLE_LORD,
     WOLF_MAGE,
-    DRAGON_MASTER
+    DRAGON_MASTER,
+
+    INVALID
 }
 
 public class RitualPlayer
@@ -13,6 +15,11 @@ public class RitualPlayer
     public var pointValues : Points;
     public var race : Race;
     public var dead : boolean = false;
+
+    public var CONTROLS_MONSTER        : boolean = false;
+    public var RULES_SORRELL           : boolean = false;
+    public var RULES_MARUS             : boolean = false;
+    public var RULES_KIDA              : boolean = false;
 
     public function RitualPlayer()
     {
@@ -32,5 +39,18 @@ public class RitualPlayer
         }
 
         pointValues = new Points(race);
+    }
+
+    private function updateRuling()
+    {
+        if (influences.hasCrown)
+        {
+        //TODO UPDATE RULING
+        }
+    }
+
+    public function updateStatus()
+    {
+        updateRuling();
     }
 }
