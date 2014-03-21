@@ -38,15 +38,20 @@ public class NetworkedFPC extends MonoBehaviour
                     child.gameObject.SetActive(false);
                 }
             }
-            this.gameObject.GetComponent(PlayerMono).enabled = false;
         }
         else
         {
+            //make a unique name
             this.gameObject.name = 
                 "rit_fpc" 
               + GetComponent(PlayerMono).getPlayerInfo().race + " "
               + GetComponent(PlayerMono).getPlayerInfo().pointValues.
-                    MONSTER_BANISHED;
+                    MONSTER_BANISHED
+              + GetComponent(PlayerMono).getPlayerInfo().pointValues.
+                    RULES_MARUS
+              + GetComponent(PlayerMono).getPlayerInfo().pointValues.
+                    EAGLE_RULES_KIDA
+            ;
                     
             networkView.RPC("changeName"
                           , RPCMode.Others

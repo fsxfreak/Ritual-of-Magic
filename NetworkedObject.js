@@ -1,7 +1,7 @@
 #pragma strict
 @script RequireComponent(NetworkView)
 
-public class NetworkedCubeScript extends MonoBehaviour
+public class NetworkedObject extends MonoBehaviour
 {
 	public function OnSerializeNetworkView(stream : BitStream, info : NetworkMessageInfo)
 	{

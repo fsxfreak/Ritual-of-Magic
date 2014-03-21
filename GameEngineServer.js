@@ -185,7 +185,7 @@ public class GameEngineServer extends MonoBehaviour
                     break;
                 }
             }
-            else if (RitualSTate.ARTIFACT_KIDA == Artifact.CROWN)
+            else if (RitualState.ARTIFACT_KIDA == Artifact.CROWN)
             {
                 switch (race)
                 {
@@ -250,7 +250,7 @@ public class GameEngineServer extends MonoBehaviour
                     break;
                 }
             }
-            else if (RitualSTate.ARTIFACT_KIDA == Artifact.SCEPTER)
+            else if (RitualState.ARTIFACT_KIDA == Artifact.SCEPTER)
             {
                 switch (race)
                 {
@@ -315,7 +315,7 @@ public class GameEngineServer extends MonoBehaviour
                     break;
                 }
             }
-            else if (RitualSTate.ARTIFACT_KIDA == Artifact.AMULET)
+            else if (RitualState.ARTIFACT_KIDA == Artifact.AMULET)
             {
                 switch (race)
                 {
@@ -344,11 +344,16 @@ public class GameEngineServer extends MonoBehaviour
     public function attemptInfluence(fromName : String, toName : String
                                    , artifactNum : int)
     {
+        Debug.Log("attemptInfluence called with: "
+                + "fromName: " + fromName + " "
+                + "toName: " + toName + " "
+                + "artifactNum: " + artifactNum + ".");
+
         var from : PlayerMono = GameObject.Find(fromName).GetComponent(PlayerMono);
         var to : PlayerMono = GameObject.Find(toName).GetComponent(PlayerMono);
 
         var player : NetworkPlayer = from.gameObject.networkView.owner;
-        var toPlayer : NetworkPlayer = from.gameObject.networkView.owner;
+        var toPlayer : NetworkPlayer = to.gameObject.networkView.owner;
 
         var artifact : Artifact = Artifact.INVALID;
         switch (artifactNum)
@@ -384,9 +389,21 @@ public class GameEngineServer extends MonoBehaviour
             from.gameObject.networkView.RPC("gotArtifact"
                                           , player
                                           , artifactNum);
-              to.gameObject.networkView.RPC("lostArtifact"
+
+            //Can't seem to be able to RPC to the server NetworkPlayer (aka self)
+            if (this.player.name == to.gameObject.name)
+            {
+                Debug.Log("server RPC to self lostArtifact");
+                to.gameObject.networkView.RPC("lostArtifact"
+                                            , RPCMode.Server
+                                            , artifactNum);
+            }
+            else
+            {
+                to.gameObject.networkView.RPC("lostArtifact"
                                           , toPlayer
                                           , artifactNum);
+            }
 
             updateRitualStateArtifactRuling(from.getPlayerInfo().race, artifact);
         }

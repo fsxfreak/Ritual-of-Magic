@@ -16,9 +16,14 @@ public class PlayerMono extends MonoBehaviour
     private var chosenArtifact    : int = 3;
     private var otherPlayerName   : String = "";
 
+    private var startTime : int = 0;
+    //GAME BALANCE: TODO
+    private var INFLUENCING_COOLDOWN : int = 5; //in seconds
+
     public function Awake()
     {
         playerInfo = new RitualPlayer();
+        startTime = Time.time;
 
         chooseArtifactText = transform.Find("chooseArtifactText").gameObject;
         chooseArtifactText.SetActive(false);
@@ -37,7 +42,15 @@ public class PlayerMono extends MonoBehaviour
 
     public function Update()
     {
-        influenceUpdateShot();
+        if (networkView.isMine)
+        {
+            influenceUpdateShot();
+            if ((Time.time - startTime) % INFLUENCING_COOLDOWN > 0
+              && !canShootInfluence)
+            {
+                canShootInfluence = true;
+            }
+        }     
     }
 
     private function influenceUpdateShot()
@@ -75,16 +88,19 @@ public class PlayerMono extends MonoBehaviour
         {
             chosenArtifact = 0;
             hasChosenArtifact = true;
+            Debug.Log("chose crown");
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             chosenArtifact = 1;
             hasChosenArtifact = true;
+            Debug.Log("chose scepter");
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             chosenArtifact = 2;
             hasChosenArtifact = true;
+            Debug.Log("chose amulet");
         }
     }
 
@@ -110,7 +126,7 @@ public class PlayerMono extends MonoBehaviour
         canShootInfluence = false;
         hasShotInfluence = true;
         hasChosenArtifact = false;
-        chosenArtifact = Artifact.INVALID;
+        chosenArtifact = 3;
     }
 
     //Only responsible for transferring artifacts.
@@ -131,6 +147,7 @@ public class PlayerMono extends MonoBehaviour
             break;
         }
 
+        Debug.Log("got artifact: " + artifact);
         switch (artifact)
         {
         case Artifact.CROWN:
@@ -205,6 +222,8 @@ public class PlayerMono extends MonoBehaviour
             artifact = Artifact.AMULET;
             break;
         }
+
+        Debug.Log("lost artifact: " + artifact);
 
         switch (artifact)
         {
