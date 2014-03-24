@@ -160,10 +160,9 @@ public class PlayerMono extends MonoBehaviour
                     0
                 );
 
-            //TODO: localPosition and localEulerAngles
             crown.transform.parent = this.transform;
-            crown.transform.localPosition = Vector3(314, 314, 314);
-            crown.transform.localEulerAngles = Vector3(314, 314, 314);
+            crown.transform.localPosition = Vector3(0, 0.825, 0);
+            crown.transform.localEulerAngles = Vector3(0, 0, 0);
 
             crown.name = "crown";
 
@@ -230,14 +229,26 @@ public class PlayerMono extends MonoBehaviour
         case Artifact.CROWN:
             playerInfo.influences.hasCrown = false;
 
-            var scepter = transform.Find("scepter(Clone)");
+            var crown = transform.Find("crown");
+            if (crown)
+                Network.Destroy(crown.gameObject.networkView.viewID);
 
             break;
         case Artifact.SCEPTER:
             playerInfo.influences.hasScepter = false;
+
+            var scepter = transform.Find("scepter");
+            if (scepter)
+                Network.Destroy(scepter.gameObject.networkView.viewID);
+
             break;
         case Artifact.AMULET:
             playerInfo.influences.hasAmulet = false;
+
+            var amulet = transform.Find("amulet");
+            if (amulet)
+                Network.Destroy(scepter.gameObject.networkView.viewID);
+
             break;
         }
     }

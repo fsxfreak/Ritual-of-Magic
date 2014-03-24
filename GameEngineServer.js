@@ -140,6 +140,7 @@ public class GameEngineServer extends MonoBehaviour
                                                    , artifact : Artifact)
     {
         //worst piece of code ever
+        //If I had more time, I'd probably use bitflags
         switch (artifact)
         {
         case Artifact.CROWN:
@@ -344,6 +345,9 @@ public class GameEngineServer extends MonoBehaviour
     public function attemptInfluence(fromName : String, toName : String
                                    , artifactNum : int)
     {
+        //TODO: Cannot influence if other person doe snot have the artifact
+        //in the first place
+
         Debug.Log("attemptInfluence called with: "
                 + "fromName: " + fromName + " "
                 + "toName: " + toName + " "
