@@ -40,17 +40,4 @@ public class RitualPlayer
 
         pointValues = new Points(race);
     }
-
-    private function updateRuling()
-    {
-        if (influences.hasCrown)
-        {
-        //TODO UPDATE RULING
-        }
-    }
-
-    public function updateStatus()
-    {
-        updateRuling();
-    }
 }

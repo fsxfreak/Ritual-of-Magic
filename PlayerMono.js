@@ -119,14 +119,27 @@ public class PlayerMono extends MonoBehaviour
             {
                 otherPlayerName = trans.gameObject.name;
                 Debug.Log(this.name + " shot " + otherPlayerName);
+
+                //status variables for shootin influence
+                canShootInfluence = false;
+                hasShotInfluence = true;
+                hasChosenArtifact = false;
+                chosenArtifact = 3;
+            }
+            else if (trans.tag == "RitualArtifactPilllar")
+            {
+                var artifactPillar : String = trans.gameObject.name;
+
+                GameObject.Find("GameEngineServer").networkView
+                .RPC("attemptInfluencePillar", RPCMode.Server
+                   , gameObject.name, artifactPillar);
+
+                canShootInfluence = false;
+                hasShotInfluence = false;
             }
         }
 
-        //status variables for shootin influence
-        canShootInfluence = false;
-        hasShotInfluence = true;
-        hasChosenArtifact = false;
-        chosenArtifact = 3;
+        
     }
 
     //Only responsible for transferring artifacts.
@@ -164,7 +177,10 @@ public class PlayerMono extends MonoBehaviour
             crown.transform.localPosition = Vector3(0, 0.825, 0);
             crown.transform.localEulerAngles = Vector3(0, 0, 0);
 
-            crown.name = "crown";
+            crown.GetComponent(NetworkedObject).name("crown");
+            crown.tag = "Crown";
+            crown.GetComponent(NetworkedObject).instantiatedBy
+                = this.gameObject.name;
 
             break;
         case Artifact.SCEPTER:
@@ -181,7 +197,10 @@ public class PlayerMono extends MonoBehaviour
             scepter.transform.localPosition = Vector3(0.5, 1.35, 0);
             scepter.transform.localEulerAngles = Vector3(0, 90, 90);
 
-            scepter.name = "scepter";
+            scepter.GetComponent(NetworkedObject).name("scepter");
+            scepter.tag = "Scepter";
+            scepter.GetComponent(NetworkedObject).instantiatedBy
+                = this.gameObject.name;
 
             break;
         case Artifact.AMULET:
@@ -198,7 +217,10 @@ public class PlayerMono extends MonoBehaviour
             amulet.transform.localPosition = Vector3(0, -0.25, 0.6);
             amulet.transform.localEulerAngles = Vector3(0, -90, -60);
 
-            amulet.name = "amulet";
+            amulet.GetComponent(NetworkedObject).name("amulet");
+            amulet.tag = "Amulet";
+            amulet.GetComponent(NetworkedObject).instantiatedBy 
+                = this.gameObject.name;
 
             break;
         }
@@ -229,25 +251,64 @@ public class PlayerMono extends MonoBehaviour
         case Artifact.CROWN:
             playerInfo.influences.hasCrown = false;
 
-            var crown = transform.Find("crown");
+            var crowns = GameObject.FindGameObjectsWithTag("Crown");
+
+            var crown : GameObject = null;
+            for (var e : GameObject in crowns)
+            {
+                if (e.GetComponent(NetworkedObject).instantiatedBy
+                 == this.gameObject.name)
+                {
+                    crown = e;
+                }
+            }
+
             if (crown)
-                Network.Destroy(crown.gameObject.networkView.viewID);
+                Network.Destroy(crown.gameObject);
+            else
+                Debug.Log("did not find crown.");
 
             break;
         case Artifact.SCEPTER:
             playerInfo.influences.hasScepter = false;
 
-            var scepter = transform.Find("scepter");
+            var scepters = GameObject.FindGameObjectsWithTag("Scepter");
+
+            var scepter : GameObject = null;
+            for (var e : GameObject in scepters)
+            {
+                if (e.GetComponent(NetworkedObject).instantiatedBy
+                 == this.gameObject.name)
+                {
+                    scepter = e;
+                }
+            }
+
             if (scepter)
-                Network.Destroy(scepter.gameObject.networkView.viewID);
+                Network.Destroy(scepter.gameObject);
+            else 
+                Debug.Log("did not find sccepter");
 
             break;
         case Artifact.AMULET:
             playerInfo.influences.hasAmulet = false;
 
-            var amulet = transform.Find("amulet");
+            var amulets = GameObject.FindGameObjectsWithTag("Amulet");
+
+            var amulet : GameObject = null;
+            for (var e : GameObject in amulets)
+            {
+                if (e.GetComponent(NetworkedObject).instantiatedBy
+                 == this.gameObject.name)
+                {
+                    amulet = e;
+                }
+            }
+
             if (amulet)
-                Network.Destroy(scepter.gameObject.networkView.viewID);
+                Network.Destroy(scepter.gameObject);
+            else
+                Debug.Log("did not find amulet");
 
             break;
         }
@@ -257,7 +318,6 @@ public class PlayerMono extends MonoBehaviour
     @RPC
     public function hasInfluenced(influenceGet : String)
     {
-        playerInfo.updateStatus();
         if (influenceGet == "true")
         {
             //TODO - Display influence gotten

@@ -3,6 +3,8 @@
 
 public class NetworkedObject extends MonoBehaviour
 {
+	public var instantiatedBy : String = null;
+
 	public function OnSerializeNetworkView(stream : BitStream, info : NetworkMessageInfo)
 	{
 		if (stream.isWriting) 
@@ -21,5 +23,17 @@ public class NetworkedObject extends MonoBehaviour
 			transform.position = temp;
 			transform.rotation = tempQuat;
 		}
+	}
+
+	public function name(name : String)
+	{
+		this.gameObject.name = name;
+		networkView.RPC("networkChangeName", RPCMode.Others, this.gameObject.name);
+	}
+
+	@RPC
+	public function networkChangeName(nameOther : String)
+	{
+		this.gameObject.name = nameOther;
 	}
 }

@@ -35,7 +35,7 @@ public class GameEngineServer extends MonoBehaviour
                 Network.SetSendingEnabled(player, 0, true);
             }
 
-            GameObject.Destroy(GameObject.Find("Main Camera"));
+            Network.Destroy(GameObject.Find("Main Camera"));
 
             //Generate the races that control each country
             var randomNumbers : int[] = new int[3];
@@ -342,12 +342,60 @@ public class GameEngineServer extends MonoBehaviour
     }
 
     @RPC
+    public function attemptInfluencePillar(fromName : String, toName : String)
+    {
+        Debug.Log("attemptInfluencePillar called with: "
+                + "fromName: " + fromName + " "
+                + "toName: " + toName + ".");
+
+        var from : PlayerMono = GameObject.Find(fromName).GetComponent(PlayerMono);
+        var to   : ArtifactPillar = GameObject.Find(toName).GetComponent(ArtifactPillar);
+
+        var player : NetworkPlayer = from.gameObject.networkView.owner;
+        var pillar : NetworkPlayer = to.gameObject.networkView.owner;
+
+        var artifact : Artifact = to.getArtifact();
+
+        var fromInfluence : float 
+            = from.getPlayerInfo().influences.getInfluenceFor(artifact);
+        var toInfluence   : float
+            = to.getInfluence();
+
+        //TODO GAME BALANCE
+        var rollNeededForSuccess : float = toInfluence - fromInfluence;
+        rollNeededForSuccess = rollNeededForSuccess < 0 
+                             ? 0 
+                             : rollNeededForSuccess;
+
+        var roll : float = Random.value;
+
+        //if pillar influence = 0, artifact already taken from it
+        if (roll > rollNeededForSuccess && to.getInfluence() > 0)
+        {
+            from.gameObject.networkView.RPC("hasInfluenced"
+                                          , player
+                                          , "true");
+            from.gameObject.networkView.RPC("gotArtifact"
+                                          , player
+                                          , to.getArtifactNum());
+
+            to.gameObject.networkView.RPC("lostArtifact"
+                                        , RPCMode.All);
+
+            updateRitualStateArtifactRuling(from.getPlayerInfo().race, artifact);
+        }
+        else
+        {
+            from.gameObject.networkView.RPC("hasInfluenced"
+                                          , player
+                                          , "false");
+        }
+    }
+
+    @RPC
     public function attemptInfluence(fromName : String, toName : String
                                    , artifactNum : int)
     {
-        //TODO: Cannot influence if other person doe snot have the artifact
-        //in the first place
-
         Debug.Log("attemptInfluence called with: "
                 + "fromName: " + fromName + " "
                 + "toName: " + toName + " "
@@ -378,14 +426,21 @@ public class GameEngineServer extends MonoBehaviour
         var toInfluence : float = 
             to.getPlayerInfo().influences.getInfluenceFor(artifact);
 
+        Debug.Log("from influence: " + fromInfluence);
+        Debug.Log("to influence: " + toInfluence);
+
+        //TODO GAME BALANCE
         var rollNeededForSuccess : float = toInfluence - fromInfluence;
         rollNeededForSuccess = rollNeededForSuccess < 0 
                              ? 0 
                              : rollNeededForSuccess;
 
+        Debug.Log("rollNeededForSuccess " + rollNeededForSuccess);
+
         var roll : float = Random.value;
 
-        if (roll > rollNeededForSuccess)
+        if (roll > rollNeededForSuccess
+         && to.getPlayerInfo().influences.hasArtifact(artifact))
         {
             from.gameObject.networkView.RPC("hasInfluenced"
                                           , player
@@ -393,6 +448,7 @@ public class GameEngineServer extends MonoBehaviour
             from.gameObject.networkView.RPC("gotArtifact"
                                           , player
                                           , artifactNum);
+            //TODO: Holder gets influence bonus?
 
             //Can't seem to be able to RPC to the server NetworkPlayer (aka self)
             if (this.player.name == to.gameObject.name)
@@ -404,9 +460,10 @@ public class GameEngineServer extends MonoBehaviour
             }
             else
             {
+                Debug.Log("client RPC " + toPlayer + " lost artifact");
                 to.gameObject.networkView.RPC("lostArtifact"
-                                          , toPlayer
-                                          , artifactNum);
+                                            , toPlayer
+                                            , artifactNum);
             }
 
             updateRitualStateArtifactRuling(from.getPlayerInfo().race, artifact);
