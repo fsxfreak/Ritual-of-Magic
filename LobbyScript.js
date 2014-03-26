@@ -3,13 +3,25 @@
 
 public class LobbyScript extends MonoBehaviour
 {
-	private var startGameButton : GUITexture;
+	public var startGameButton : GameObject = null;
 	public var gameEngine : GameObject;
 
 	public function Awake()
 	{
 		DontDestroyOnLoad(this);
-		startGameButton = GameObject.Find("startGame").GetComponent(GUITexture);
+		networkView.group = 1;
+	}
+
+	public function Update()
+	{
+		if (Network.isServer)
+		{
+			if (startGameButton == null)
+			{
+				startGameButton = GameObject.Find("startGame");
+				Debug.Log("startGame should be initialized");
+			}
+		}
 	}
 
 	public function OnGUI()
@@ -19,7 +31,7 @@ public class LobbyScript extends MonoBehaviour
 			var e : Event = Event.current;
 			if (e.type == EventType.MouseDown)
 			{
-				if (startGameButton.HitTest(e.mousePosition))
+				if (startGameButton.GetComponent(GUITexture).HitTest(e.mousePosition))
 				{
 					Debug.Log("start game");
 					startGame();
