@@ -11,14 +11,14 @@ public class Influence
         artifact = artif;
     }
 
-    public function changeInfluence(amount : float)
+    public function setInfluence(amount : float)
     {
-        influence += amount;
+        if (amount > 1.0)
+            amount = 1.0;
+        else if (amount < 0.0)
+            amount = 0.0;
 
-        if (influence <= 0)
-            influence = 0;
-        else if (influence >= 1)
-            influence = 1;
+        influence = amount;
     }
     
     public function getInfluence() : float { return influence; }

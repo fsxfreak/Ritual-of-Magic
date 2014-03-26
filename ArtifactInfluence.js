@@ -17,6 +17,57 @@ public class ArtifactInfluence
         amulet  = new Influence(0, Artifact.AMULET);
     }
 
+    public function hasArtifact(artifact : int) : boolean
+    {
+        switch (artifact)
+        {
+        case 0:
+            return hasCrown;
+        case 1:
+            return hasScepter;
+        case 2:
+            return hasAmulet;
+        default:
+            return false;
+        }
+    }
+
+    public function hasArtifact(artifact : Artifact) : boolean
+    {
+        switch (artifact)
+        {
+        case Artifact.CROWN:
+            return hasCrown;
+        case Artifact.SCEPTER:
+            return hasScepter;
+        case Artifact.AMULET:
+            return hasAmulet;
+        default:
+            return false;
+        }
+    }
+
+    public function getInfluenceFor(artifact : int) : float
+    {
+        var arti : Artifact = Artifact.INVALID;
+        switch (artifact)
+        {
+        case 0:
+            arti = Artifact.CROWN;
+            break;
+        case 1:
+            arti = Artifact.SCEPTER;
+            break;
+        case 2:
+            arti = Artifact.AMULET;
+            break;
+        default:
+            break;
+        }
+
+        return getInfluenceFor(arti);
+    }
+
     public function getInfluenceFor(artifact : Artifact) : float
     {
         switch (artifact)
@@ -30,18 +81,18 @@ public class ArtifactInfluence
         }
     }
 
-    public function changeInfluenceFor(artifact : Artifact, amount : float)
+    public function setInfluenceFor(artifact : Artifact, amount : float)
     {
         switch (artifact)
         {
         case Artifact.CROWN:
-            crown.changeInfluence(amount);
+            crown.setInfluence(amount);
             break;
         case Artifact.SCEPTER:
-            scepter.changeInfluence(amount);
+            scepter.setInfluence(amount);
             break;
         case Artifact.AMULET:
-            amulet.changeInfluence(amount);
+            amulet.setInfluence(amount);
             break;
         }
     }
