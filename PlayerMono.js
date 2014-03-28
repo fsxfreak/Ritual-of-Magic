@@ -58,7 +58,6 @@ public class PlayerMono extends MonoBehaviour
         //TODO: can only press the fire button every period interval
         if (Input.GetKeyDown(KeyCode.F) && canShootInfluence)
         {
-            hasShotInfluence = true;
             fireInfluenceShot();
         }
 
@@ -115,6 +114,7 @@ public class PlayerMono extends MonoBehaviour
         if (Physics.Raycast(pos, dir, rayInfo, 500.0))
         {
             var trans : Transform = rayInfo.transform;
+            Debug.Log(trans.gameObject.name);
             if (trans.tag == "RitualPlayer")
             {
                 otherPlayerName = trans.gameObject.name;
@@ -126,9 +126,11 @@ public class PlayerMono extends MonoBehaviour
                 hasChosenArtifact = false;
                 chosenArtifact = 3;
             }
-            else if (trans.tag == "RitualArtifactPilllar")
+            else if (trans.tag == "RitualArtifactPillar")
             {
                 var artifactPillar : String = trans.gameObject.name;
+
+                Debug.Log("attempting influence on pillar");
 
                 GameObject.Find("GameEngineServer").networkView
                 .RPC("attemptInfluencePillar", RPCMode.Server
