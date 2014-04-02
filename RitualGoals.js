@@ -28,18 +28,53 @@ enum MonsterStatus
     WAITING
 }
 
-enum Artifact
-{
-    CROWN,
-    SCEPTER,
-    AMULET,
-
-    INVALID
-}
-
 enum Countries
 {
+    SORRELL,
     MARUS,
-    KIDA,
-    SORRELL
+    KIDA
+}
+
+public static class Race
+{
+    var EAGLE_LORD : int =        1 << 0;
+    var WOLF_MAGE : int =         1 << 1;
+    var DRAGON_MASTER : int =     1 << 2;
+
+    var RACE : int =              EAGLE_LORD + WOLF_MAGE + DRAGON_MASTER;
+
+    public function translate(race : int) : String
+    {
+        switch (race)
+        {
+        case EAGLE_LORD:
+            return "eagle";
+        case WOLF_MAGE:
+            return "wolf";
+        case DRAGON_MASTER:
+            return "dragon";
+        }
+    }
+}
+
+public static class Artifact
+{
+    var CROWN : int =             1 << 4;
+    var SCEPTER : int =           1 << 5;
+    var AMULET : int =            1 << 6;
+
+    var ARTIFACT : int =          CROWN + SCEPTER + AMULET;
+
+    public function translate(artifact : int) : String
+    {
+        switch (artifact)
+        {
+        case CROWN:
+            return "crown";
+        case SCEPTER:
+            return "scepter";
+        case AMULET:
+            return "amulet";
+        }
+    }
 }

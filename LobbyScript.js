@@ -4,7 +4,6 @@
 public class LobbyScript extends MonoBehaviour
 {
 	public var startGameButton : GameObject = null;
-	public var gameEngine : GameObject;
 
 	public function Awake()
 	{

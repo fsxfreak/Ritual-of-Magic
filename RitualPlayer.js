@@ -1,19 +1,10 @@
 ﻿#pragma strict
 
-enum Race
-{
-    EAGLE_LORD,
-    WOLF_MAGE,
-    DRAGON_MASTER,
-
-    INVALID
-}
-
 public class RitualPlayer
 {
     public var influences : ArtifactInfluence;
     public var pointValues : Points;
-    public var race : Race;
+    public var race : int;
     public var dead : boolean = false;
 
     public var CONTROLS_MONSTER        : boolean = false;

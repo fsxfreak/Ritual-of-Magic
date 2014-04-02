@@ -85,19 +85,19 @@ public class PlayerMono extends MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            chosenArtifact = 0;
+            chosenArtifact = Artifact.CROWN;
             hasChosenArtifact = true;
             Debug.Log("chose crown");
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            chosenArtifact = 1;
+            chosenArtifact = Artifact.SCEPTER;
             hasChosenArtifact = true;
             Debug.Log("chose scepter");
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            chosenArtifact = 2;
+            chosenArtifact = Artifact.AMULET;
             hasChosenArtifact = true;
             Debug.Log("chose amulet");
         }
@@ -146,27 +146,13 @@ public class PlayerMono extends MonoBehaviour
 
     //Only responsible for transferring artifacts.
     @RPC
-    public function gotArtifact(artifactNum : int)
+    public function gotArtifact(artifact : int)
     {
-        var artifact : Artifact = Artifact.INVALID;
-        switch (artifactNum)
-        {
-        case 0:
-            artifact = Artifact.CROWN;
-            break;
-        case 1:
-            artifact = Artifact.SCEPTER;
-            break;
-        case 2:
-            artifact = Artifact.AMULET;
-            break;
-        }
-
         Debug.Log("got artifact: " + artifact);
         switch (artifact)
         {
         case Artifact.CROWN:
-            playerInfo.influences.hasCrown = true;
+            playerInfo.influences.artifactMask |= Artifact.CROWN;
 
             var crown : GameObject = Network.Instantiate(
                     crownPrefab as GameObject,
@@ -186,7 +172,7 @@ public class PlayerMono extends MonoBehaviour
 
             break;
         case Artifact.SCEPTER:
-            playerInfo.influences.hasScepter = true;
+            playerInfo.influences.artifactMask |= Artifact.SCEPTER;
 
             var scepter : GameObject = Network.Instantiate(
                     scepterPrefab as GameObject,
@@ -206,7 +192,7 @@ public class PlayerMono extends MonoBehaviour
 
             break;
         case Artifact.AMULET:
-            playerInfo.influences.hasAmulet = true;
+            playerInfo.influences.artifactMask |= Artifact.AMULET;
 
             var amulet : GameObject = Network.Instantiate(
                     amuletPrefab as GameObject,
@@ -230,28 +216,14 @@ public class PlayerMono extends MonoBehaviour
 
     //Only responsible for transferring artifacts.
     @RPC
-    public function lostArtifact(artifactNum : int)
+    public function lostArtifact(artifact : int)
     {
-        var artifact : Artifact = Artifact.INVALID;
-        switch (artifactNum)
-        {
-        case 0:
-            artifact = Artifact.CROWN;
-            break;
-        case 1:
-            artifact = Artifact.SCEPTER;
-            break;
-        case 2:
-            artifact = Artifact.AMULET;
-            break;
-        }
-
         Debug.Log("lost artifact: " + artifact);
 
         switch (artifact)
         {
         case Artifact.CROWN:
-            playerInfo.influences.hasCrown = false;
+            playerInfo.influences.artifactMask &= ~Artifact.CROWN;
 
             var crowns = GameObject.FindGameObjectsWithTag("Crown");
 
@@ -272,7 +244,7 @@ public class PlayerMono extends MonoBehaviour
 
             break;
         case Artifact.SCEPTER:
-            playerInfo.influences.hasScepter = false;
+            playerInfo.influences.artifactMask &= ~Artifact.SCEPTER;
 
             var scepters = GameObject.FindGameObjectsWithTag("Scepter");
 
@@ -293,7 +265,7 @@ public class PlayerMono extends MonoBehaviour
 
             break;
         case Artifact.AMULET:
-            playerInfo.influences.hasAmulet = false;
+            playerInfo.influences.artifactMask &= ~Artifact.AMULET;
 
             var amulets = GameObject.FindGameObjectsWithTag("Amulet");
 
@@ -308,7 +280,7 @@ public class PlayerMono extends MonoBehaviour
             }
 
             if (amulet)
-                Network.Destroy(scepter.gameObject);
+                Network.Destroy(amulet.gameObject);
             else
                 Debug.Log("did not find amulet");
 

@@ -3,9 +3,9 @@
 public class Influence
 {
     private var influence : float = 0;
-    private var artifact  : Artifact;
+    private var artifact  : int;
 
-    public function Influence(influ : float, artif : Artifact)
+    public function Influence(influ : float, artif : int)
     {
         influence = influ;
         artifact = artif;
@@ -22,5 +22,5 @@ public class Influence
     }
     
     public function getInfluence() : float { return influence; }
-    public function getArtifact() : Artifact { return artifact; } 
+    public function getArtifact() : int { return artifact; } 
 }

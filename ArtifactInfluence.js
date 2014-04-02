@@ -6,9 +6,7 @@ public class ArtifactInfluence
     private var scepter : Influence;
     private var amulet  : Influence;
 
-    public var hasCrown   : boolean = false;
-    public var hasScepter : boolean = false;
-    public var hasAmulet  : boolean = false;
+    public var artifactMask : int = 0;
 
     public function ArtifactInfluence()
     {
@@ -19,56 +17,10 @@ public class ArtifactInfluence
 
     public function hasArtifact(artifact : int) : boolean
     {
-        switch (artifact)
-        {
-        case 0:
-            return hasCrown;
-        case 1:
-            return hasScepter;
-        case 2:
-            return hasAmulet;
-        default:
-            return false;
-        }
-    }
-
-    public function hasArtifact(artifact : Artifact) : boolean
-    {
-        switch (artifact)
-        {
-        case Artifact.CROWN:
-            return hasCrown;
-        case Artifact.SCEPTER:
-            return hasScepter;
-        case Artifact.AMULET:
-            return hasAmulet;
-        default:
-            return false;
-        }
+        return (artifact & artifactMask) == artifact;
     }
 
     public function getInfluenceFor(artifact : int) : float
-    {
-        var arti : Artifact = Artifact.INVALID;
-        switch (artifact)
-        {
-        case 0:
-            arti = Artifact.CROWN;
-            break;
-        case 1:
-            arti = Artifact.SCEPTER;
-            break;
-        case 2:
-            arti = Artifact.AMULET;
-            break;
-        default:
-            break;
-        }
-
-        return getInfluenceFor(arti);
-    }
-
-    public function getInfluenceFor(artifact : Artifact) : float
     {
         switch (artifact)
         {
@@ -79,6 +31,8 @@ public class ArtifactInfluence
         case Artifact.AMULET:
             return amulet.getInfluence();
         }
+
+        return 0.0;
     }
 
     public function setInfluenceFor(artifact : Artifact, amount : float)

@@ -46,7 +46,7 @@ public class Points
     private static var takenWolf   : Hashtable = new Hashtable();
     private static var takenInitialized : boolean = false;
 
-    public function Points(race : Race)
+    public function Points(race : int)
     {
         if (!takenInitialized)
         {
@@ -65,7 +65,7 @@ public class Points
         assignPointsForIndex(index, race);
     }
 
-    private function getUniqueIndex(race : Race) : int
+    private function getUniqueIndex(race : int) : int
     {
         //these loops will hang if more than 4 of each race. 
         //I assume otherwise
@@ -136,7 +136,7 @@ public class Points
         }
     }
 
-    private function assignPointsForIndex(index : int, race : Race)
+    private function assignPointsForIndex(index : int, race : int)
     {
         switch (race)
         {

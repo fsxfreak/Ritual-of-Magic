@@ -44,9 +44,23 @@ public class NetworkedFPC extends MonoBehaviour
         else
         {
             //make a unique name
+            var raceName : String;
+            switch (GetComponent(PlayerMono).getPlayerInfo().race)
+            {
+            case Race.EAGLE_LORD:
+                raceName = "eagle";
+                break;
+            case Race.WOLF_MAGE:
+                raceName = "wolf";
+                break;
+            case Race.DRAGON_MASTER:
+                raceName = "dragon";
+                break;
+            }
+
             this.gameObject.name = 
                 "rit_fpc" 
-              + GetComponent(PlayerMono).getPlayerInfo().race + " "
+              + raceName + " "
               + GetComponent(PlayerMono).getPlayerInfo().pointValues.
                     MONSTER_BANISHED
               + GetComponent(PlayerMono).getPlayerInfo().pointValues.
@@ -55,7 +69,19 @@ public class NetworkedFPC extends MonoBehaviour
                     EAGLE_RULES_KIDA
             ;
 
-            this.GetComponent(NetworkedObject).name(this.gameObject.name);
+            name(this.gameObject.name);
         }
+    }
+
+    public function name(name : String)
+    {
+        this.gameObject.name = name;
+        networkView.RPC("networkChangeName", RPCMode.Others, this.gameObject.name);
+    }
+
+    @RPC
+    public function networkChangeName(nameOther : String)
+    {
+        this.gameObject.name = nameOther;
     }
 }

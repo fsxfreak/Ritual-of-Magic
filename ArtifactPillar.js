@@ -3,9 +3,7 @@
 
 public class ArtifactPillar extends MonoBehaviour
 {
-	@Range(0, 3)
-	public var artifactNum : int = 3;
-	//0 crown, 1 scepter, 2 amulet, 3 invalid
+	public var artifact : int;
 
 	//TODO GAME BALANCE
 	@Range(0, 1)
@@ -13,31 +11,12 @@ public class ArtifactPillar extends MonoBehaviour
 
 	private var influence : Influence = null;
 
-	public function Awake()
+	public function Start()
 	{
-		var artifact : Artifact = Artifact.INVALID;
-
-		switch (artifactNum)
-		{
-		case 0:
-			artifact = Artifact.CROWN;
-			break;
-		case 1:
-			artifact = Artifact.SCEPTER;
-			break;
-		case 2:
-			artifact = Artifact.AMULET;
-			break;
-		default:
-			artifact = Artifact.INVALID;
-		}
-
 		influence = new Influence(startingInfluence, artifact);
 	}
 
-	public function getArtifact() : Artifact { return influence.getArtifact(); }
-	public function getArtifactNum() : int { return artifactNum; }
-
+	public function getArtifact() : int { return influence.getArtifact(); }
 	public function getInfluence() : float { return influence.getInfluence(); }
 
 	@RPC
