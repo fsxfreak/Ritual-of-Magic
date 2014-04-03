@@ -35,6 +35,7 @@ enum Countries
     KIDA
 }
 
+//one thing languages with enums need to copy from Java - Java's enums
 public static class Race
 {
     var EAGLE_LORD : int =        1 << 0;

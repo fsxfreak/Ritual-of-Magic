@@ -37,7 +37,7 @@ public class NetworkedFPC extends MonoBehaviour
                 if (child.name == "Main Camera")
                 {
                     child.gameObject.SetActive(false);
-                    Network.Destroy(child.gameObject);
+                    Destroy(child.gameObject);
                 }
             }
         }

@@ -8,37 +8,27 @@ public class PlayerMono extends MonoBehaviour
     public var amuletPrefab : GameObject;
     public var scepterPrefab : GameObject;
 
-    public var chooseArtifactText : GameObject;
-
     private var canShootInfluence : boolean = true;
     private var hasShotInfluence  : boolean = false;
     private var hasChosenArtifact : boolean = false;
-    private var chosenArtifact    : int = 3;
+    private var chosenArtifact    : int = 0;
     private var otherPlayerName   : String = "";
 
     private var startTime : int = 0;
     //GAME BALANCE: TODO
     private var INFLUENCING_COOLDOWN : int = 5; //in seconds
 
+    private var gui : PlayerGUI;
+
     public function Awake()
     {
+        gui = transform.Find("GUI").GetComponent(PlayerGUI);
+
         playerInfo = new RitualPlayer();
         startTime = Time.time;
-
-        chooseArtifactText = transform.Find("chooseArtifactText").gameObject;
-        chooseArtifactText.SetActive(false);
     }
 
     public function getPlayerInfo() : RitualPlayer { return playerInfo; }
-
-    public function OnGUI()
-    {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            Debug.Log("tab pressed");
-            //TODO: DISPLAY PLAYER INFORMATION HERE
-        }
-    }
 
     public function Update()
     {
@@ -49,6 +39,41 @@ public class PlayerMono extends MonoBehaviour
               && !canShootInfluence)
             {
                 canShootInfluence = true;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                gui.setTextToDisplay("scoreboard"
+                    , "tsetselkklslfksjf;sdfklsjdf;lkajf;laksdjfa;sldfbaw;elfa"
+                    + "bwel;fkabwel;fkabweflkawbefl;akwebsdfsdfsdfsdfsdfsdfsdf"
+                    + "sdfklsdfa;lwebaowgihasdl;gkjaw;lkgba;wefija;wlkfajl;fka"
+                    + "sdkjfabwekfjabwe;fklajsd;glkabwgo;aiwheg;laksjdg;lkasdj"
+                    + "\nWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
+                    , 0);
+            }
+            else if (Input.GetKeyUp(KeyCode.Q))
+            {
+                gui.removeTextFromDisplay("scoreboard");
+            }
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                gui.setTextToDisplay("notification", "test", 3.00);
+            }
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                gui.setTextToDisplay("goal"
+                    , "tsetVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVa"
+                    + "bwel;fkabwel;fkabweflkawbefl;akwebsdfsdfsdfsdfsdfsdfsdf"
+                    + "sdfklsdfa;lwebaowgihasdl;gkjaw;lkgba;wefija;wlkfajl;fka"
+                    + "sdkjfabwekfjabwe;fklajsd;glkabwgo;aiwheg;laksjdg;lkasdj"
+                    + "\nWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
+                    , 0);
+            }
+            else if (Input.GetKeyUp(KeyCode.R))
+            {
+                gui.removeTextFromDisplay("goal");
             }
         }     
     }

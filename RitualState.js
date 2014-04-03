@@ -6,9 +6,9 @@ public class RitualState
     public static var ARTIFACT_MARUS          : int = 0;
     public static var ARTIFACT_KIDA           : int = 0;
 
-    public static var RACE_RULES_SORRELL     : int = 0;
-    public static var RACE_RULES_MARUS       : int = 0;
-    public static var RACE_RULES_KIDA        : int = 0;
+    public static var RACE_RULES_SORRELL      : int = 0;
+    public static var RACE_RULES_MARUS        : int = 0;
+    public static var RACE_RULES_KIDA         : int = 0;
 
     public static var WOLF_CONTROLS_MONSTER   : boolean = false;
     public static var WOLF_DIES               : boolean = false;
@@ -64,22 +64,22 @@ public class RitualState
     public static function printStatus()
     {
         Debug.Log(
-              ARTIFACT_SORRELL + ": ARTIFACT_SORRELL\n"
-            + ARTIFACT_MARUS + ": ARTIFACT_MARUS\n"
-            + ARTIFACT_KIDA + ": ARTIFACT_KIDA\n"
-            + whoRules(Countries.SORRELL) + ":RACE_RULES_SORRELL\n"
-            + whoRules(Countries.MARUS) + ":RACE_RULES_MARUS\n"
-            + whoRules(Countries.KIDA) + ":RACE_RULES_KIDA\n"
-            + WOLF_CONTROLS_MONSTER + ": WOLF_CONTROLS_MONSTER\n"
-            + WOLF_DIES + ": WOLF_DIES\n"
-            + DRAGON_CONTROLS_MONSTER + ": DRAGON_CONTROLS_MONSTER\n"
-            + DRAGON_DIES + ": DRAGON_DIES\n"
-            + EAGLE_CONTROLS_MONSTER + ": EAGLE_CONTROLS_MONSTER\n"
-            + EAGLE_DIES + ": EAGLE_DIES\n"
-            + MONSTER_BANISHED + ": MONSTER_BANISHED\n"
-            + AT_LEAST_ONE_COUNTRY_NO_RULER + ": AT_LEAST_ONE_COUNTRY_NO_RULER\n"
-            + NOBODY_DIES + ": NOBODY_DIES\n"
-            + MONSTER_RAMPAGES_COUNTRY + ": MONSTER_RAMPAGES_COUNTRY\n"
+              ARTIFACT_SORRELL                  + ": ARTIFACT_SORRELL\n"
+            + ARTIFACT_MARUS                    + ": ARTIFACT_MARUS\n"
+            + ARTIFACT_KIDA                     + ": ARTIFACT_KIDA\n"
+            + whoRules(Countries.SORRELL)       + ": RACE_RULES_SORRELL\n"
+            + whoRules(Countries.MARUS)         + ": RACE_RULES_MARUS\n"
+            + whoRules(Countries.KIDA)          + ": RACE_RULES_KIDA\n"
+            + WOLF_CONTROLS_MONSTER             + ": WOLF_CONTROLS_MONSTER\n"
+            + WOLF_DIES                         + ": WOLF_DIES\n"
+            + DRAGON_CONTROLS_MONSTER           + ": DRAGON_CONTROLS_MONSTER\n"
+            + DRAGON_DIES                       + ": DRAGON_DIES\n"
+            + EAGLE_CONTROLS_MONSTER            + ": EAGLE_CONTROLS_MONSTER\n"
+            + EAGLE_DIES                        + ": EAGLE_DIES\n"
+            + MONSTER_BANISHED                  + ": MONSTER_BANISHED\n"
+            + AT_LEAST_ONE_COUNTRY_NO_RULER     + ": AT_LEAST_ONE_COUNTRY_NO_RULER\n"
+            + NOBODY_DIES                       + ": NOBODY_DIES\n"
+            + MONSTER_RAMPAGES_COUNTRY          + ": MONSTER_RAMPAGES_COUNTRY"
         );
     }
 }
