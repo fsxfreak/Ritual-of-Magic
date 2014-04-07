@@ -252,8 +252,6 @@ public class GameEngineServer extends MonoBehaviour
                                           , player
                                           , artifact);
             //TODO: Holder gets influence bonus?
-
-            //Can't seem to be able to RPC to the server NetworkPlayer (aka self)
             if (Network.isServer)
             {
                 Debug.Log("server RPC to self lostArtifact");

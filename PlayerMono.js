@@ -64,11 +64,7 @@ public class PlayerMono extends MonoBehaviour
             if (Input.GetKeyDown(KeyCode.R))
             {
                 gui.setTextToDisplay("goal"
-                    , "tsetVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVa"
-                    + "bwel;fkabwel;fkabweflkawbefl;akwebsdfsdfsdfsdfsdfsdfsdf"
-                    + "sdfklsdfa;lwebaowgihasdl;gkjaw;lkgba;wefija;wlkfajl;fka"
-                    + "sdkjfabwekfjabwe;fklajsd;glkabwgo;aiwheg;laksjdg;lkasdj"
-                    + "\nWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
+                    , playerInfo.pointValues.stringifyPoints()
                     , 0);
             }
             else if (Input.GetKeyUp(KeyCode.R))

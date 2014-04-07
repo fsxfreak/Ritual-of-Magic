@@ -13,12 +13,18 @@ public class PlayerGUI extends MonoBehaviour
        scoreboard - display ritual state
     */
 
+    public static var positiveColor : GUIStyle = new GUIStyle();
+    public static var negativeColor : GUIStyle = new GUIStyle();
+    
     public function Start()
     {
+        positiveColor.normal.textColor = Color(0.1, 0.3, 0.8, 0.8);
+        negativeColor.normal.textColor = Color(0.8, 0.3, 0.1, 0.8);
+
         var PADDING : int = 5;
 
         var goalsWidth = 300;
-        var goalsHeight = 40;
+        var goalsHeight = 200;
         textRegions.Add("goal"
                       , Rect(PADDING
                            , PADDING
@@ -42,7 +48,7 @@ public class PlayerGUI extends MonoBehaviour
                            , scoreboardHeight));
     }
 
-    public function setTextToDisplay(key : String, value : String, duration : float)
+    public function setTextToDisplay(key : String, value : String, duration : float, style : GUIStyle)
     {
         if (textToDisplay.Contains(key)) //overwrite existing message
         {

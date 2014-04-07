@@ -65,6 +65,42 @@ public class Points
         assignPointsForIndex(index, race);
     }
 
+    public function stringifyPoints() : String
+    {
+        return 
+            ifNotZero("You control monster: ", CONTROLS_MONSTER)
+          + ifNotZero("\n" + "You rule Sorrell: ", RULES_SORRELL)
+          + ifNotZero("\n" + "You rule Marus: ", RULES_MARUS)
+          + ifNotZero("\n" + "You rule Kida: ", RULES_KIDA)
+          + ifNotZero("\n" + "You die: ", DIES)
+          + ifNotZero("\n" + "Wolf controls monster: ", WOLF_CONTROLS_MONSTER)
+          + ifNotZero("\n" + "Wolf rules Sorrell: ", WOLF_RULES_SORRELL)
+          + ifNotZero("\n" + "Wolf rules Marus: ", WOLF_RULES_MARUS)
+          + ifNotZero("\n" + "Wolf rules Kida: ",  WOLF_RULES_KIDA)
+          + ifNotZero("\n" + "Wolf dies: ", WOLF_DIES)
+          + ifNotZero("\n" + "Dragon controls monster: ", DRAGON_CONTROLS_MONSTER)
+          + ifNotZero("\n" + "Dragon rules Sorrell: ", DRAGON_RULES_SORRELL)
+          + ifNotZero("\n" + "Dragon rules Marus: ", DRAGON_RULES_MARUS)
+          + ifNotZero("\n" + "Dragon rules Kida: ",  DRAGON_RULES_KIDA)
+          + ifNotZero("\n" + "Dragon dies: ", DRAGON_DIES)
+          + ifNotZero("\n" + "Eagle controls monster: ", EAGLE_CONTROLS_MONSTER)
+          + ifNotZero("\n" + "Eagle rules Sorrell: ", EAGLE_RULES_SORRELL)
+          + ifNotZero("\n" + "Eagle rules Marus: ", EAGLE_RULES_MARUS)
+          + ifNotZero("\n" + "Eagle rules Kida: ",  EAGLE_RULES_KIDA)
+          + ifNotZero("\n" + "Eagle dies: ", EAGLE_DIES)
+          + ifNotZero("\n" + "Monster banished: ", MONSTER_BANISHED)
+          + ifNotZero("\n" + "Monster banished and you live: ", MONSTER_BANISHED_LIVE)
+          + ifNotZero("\n" + "At least one country has no ruler: ", AT_LEAST_ONE_COUNTRY_NO_RULER)
+          + ifNotZero("\n" + "Nobody dies: ", NOBODY_DIES)
+          + ifNotZero("\n" + "Monster rampages country: ", MONSTER_RAMPAGES_COUNTRY)
+          + ifNotZero("\n" + "Someone else dies: ", SOMEONE_ELSE_DIES);
+    }
+
+    private function ifNotZero(label : String, num : int) : String
+    {
+        return num != 0 ? label + num : "";
+    }
+
     private function getUniqueIndex(race : int) : int
     {
         //these loops will hang if more than 4 of each race. 
