@@ -12,15 +12,9 @@ public class PlayerGUI extends MonoBehaviour
        notification - tell the player important information
        scoreboard - display ritual state
     */
-
-    public static var positiveColor : GUIStyle = new GUIStyle();
-    public static var negativeColor : GUIStyle = new GUIStyle();
     
     public function Start()
     {
-        positiveColor.normal.textColor = Color(0.1, 0.3, 0.8, 0.8);
-        negativeColor.normal.textColor = Color(0.8, 0.3, 0.1, 0.8);
-
         var PADDING : int = 5;
 
         var goalsWidth = 300;
@@ -46,9 +40,18 @@ public class PlayerGUI extends MonoBehaviour
                            , goalsHeight + PADDING
                            , scoreboardWidth
                            , scoreboardHeight));
+
+        var artifactModeWidth = 20;
+        var artifactModeHeight = 14;
+        textRegions.Add("artifactMode"
+                      , Rect(Screen.width - artifactModeWidth - PADDING
+                           , PADDING
+                           , artifactModeWidth
+                           , artifactModeHeight));
+
     }
 
-    public function setTextToDisplay(key : String, value : String, duration : float, style : GUIStyle)
+    public function setTextToDisplay(key : String, value : String, duration : float)
     {
         if (textToDisplay.Contains(key)) //overwrite existing message
         {

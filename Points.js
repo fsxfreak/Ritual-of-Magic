@@ -65,7 +65,7 @@ public class Points
         assignPointsForIndex(index, race);
     }
 
-    public function stringifyPoints() : String
+    public function stringify() : String
     {
         return 
             ifNotZero("You control monster: ", CONTROLS_MONSTER)

@@ -10,7 +10,6 @@ public class PlayerMono extends MonoBehaviour
 
     private var canShootInfluence : boolean = true;
     private var hasShotInfluence  : boolean = false;
-    private var hasChosenArtifact : boolean = false;
     private var chosenArtifact    : int = 0;
     private var otherPlayerName   : String = "";
 
@@ -39,39 +38,71 @@ public class PlayerMono extends MonoBehaviour
               && !canShootInfluence)
             {
                 canShootInfluence = true;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                gui.setTextToDisplay("scoreboard"
-                    , "tsetselkklslfksjf;sdfklsjdf;lkajf;laksdjfa;sldfbaw;elfa"
-                    + "bwel;fkabwel;fkabweflkawbefl;akwebsdfsdfsdfsdfsdfsdfsdf"
-                    + "sdfklsdfa;lwebaowgihasdl;gkjaw;lkgba;wefija;wlkfajl;fka"
-                    + "sdkjfabwekfjabwe;fklajsd;glkabwgo;aiwheg;laksjdg;lkasdj"
-                    + "\nWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
-                    , 0);
-            }
-            else if (Input.GetKeyUp(KeyCode.Q))
-            {
-                gui.removeTextFromDisplay("scoreboard");
-            }
-
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                gui.setTextToDisplay("notification", "test", 3.00);
-            }
-
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                gui.setTextToDisplay("goal"
-                    , playerInfo.pointValues.stringifyPoints()
-                    , 0);
-            }
-            else if (Input.GetKeyUp(KeyCode.R))
-            {
-                gui.removeTextFromDisplay("goal");
-            }
+            }            
         }     
+    }
+
+    private function updateGUI()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            gui.setTextToDisplay("scoreboard"
+                , "tsetselkklslfksjf;sdfklsjdf;lkajf;laksdjfa;sldfbaw;elfa"
+                + "bwel;fkabwel;fkabweflkawbefl;akwebsdfsdfsdfsdfsdfsdfsdf"
+                + "sdfklsdfa;lwebaowgihasdl;gkjaw;lkgba;wefija;wlkfajl;fka"
+                + "sdkjfabwekfjabwe;fklajsd;glkabwgo;aiwheg;laksjdg;lkasdj"
+                + "\nWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
+                , 0);
+        }
+        else if (Input.GetKeyUp(KeyCode.Q))
+        {
+            gui.removeTextFromDisplay("scoreboard");
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            gui.setTextToDisplay("notification"
+                               , "artifact: " + playerInfo.influences.artifactMask
+                               , 0);
+        }
+        else if (Input.GetKeyUp(KeyCode.E))
+        {
+            gui.removeTextFromDisplay("notification");
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            gui.setTextToDisplay("goal"
+                               , playerInfo.pointValues.stringify()
+                               , 0);
+        }
+        else if (Input.GetKeyUp(KeyCode.R))
+        {
+            gui.removeTextFromDisplay("goal");
+        }
+
+        var translateArtifact : String = Artifact.translate(chosenArtifact);
+
+        gui.setTextToDisplay("artifactMode"
+                           , translateArtifact
+                           , 0);
+    }
+
+    public function OnParticleCollision(particles : GameObject)
+    {
+        //TODO: TEST
+        //add influence from particles to ourself
+        //network destroy particles
+        if (particles.tag == "InfluenceOrb")
+        {
+            var influence : float = particles.GetComponent(InfluenceOrb).getInfluenceContained();
+
+            switch (chosenArtifact)
+            {
+
+            }
+            playerInfo.influences.addInfluenceFor()
+        }
     }
 
     private function influenceUpdateShot()
@@ -82,12 +113,11 @@ public class PlayerMono extends MonoBehaviour
             fireInfluenceShot();
         }
 
-        if (hasShotInfluence && !hasChosenArtifact)
+        if (hasShotInfluence)
         {
             waitForArtifactChosen();
         }
-        else if (hasShotInfluence && hasChosenArtifact 
-              && chosenArtifact != 3)
+        else if (hasShotInfluence && chosenArtifact != 3)
         {
             Debug.Log("Shot influence to server");
 
@@ -97,8 +127,7 @@ public class PlayerMono extends MonoBehaviour
                    , chosenArtifact);
 
             hasShotInfluence = false;
-            hasChosenArtifact = false;
-            chosenArtifact = 3;
+        
         }
     }
 
@@ -107,19 +136,19 @@ public class PlayerMono extends MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             chosenArtifact = Artifact.CROWN;
-            hasChosenArtifact = true;
+        
             Debug.Log("chose crown");
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             chosenArtifact = Artifact.SCEPTER;
-            hasChosenArtifact = true;
+        
             Debug.Log("chose scepter");
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             chosenArtifact = Artifact.AMULET;
-            hasChosenArtifact = true;
+        
             Debug.Log("chose amulet");
         }
     }
@@ -144,8 +173,8 @@ public class PlayerMono extends MonoBehaviour
                 //status variables for shootin influence
                 canShootInfluence = false;
                 hasShotInfluence = true;
-                hasChosenArtifact = false;
-                chosenArtifact = 3;
+            
+                chosenArtifact = Artifact.ARTIFACT;
             }
             else if (trans.tag == "RitualArtifactPillar")
             {
