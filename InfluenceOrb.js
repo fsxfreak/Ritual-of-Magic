@@ -3,7 +3,7 @@
 public class InfluenceOrb extends MonoBehaviour
 {
 	//TODO GAME BALANCE
-	private var infleunceContained : float = 0.05;
+	private var influenceContained : float = 0.05;
 
 	public function Start()
 	{

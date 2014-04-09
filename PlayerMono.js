@@ -33,6 +33,8 @@ public class PlayerMono extends MonoBehaviour
     {
         if (networkView.isMine)
         {
+            updateGUI();
+            waitForArtifactChosen();
             influenceUpdateShot();
             if ((Time.time - startTime) % INFLUENCING_COOLDOWN > 0
               && !canShootInfluence)
@@ -82,26 +84,22 @@ public class PlayerMono extends MonoBehaviour
         }
 
         var translateArtifact : String = Artifact.translate(chosenArtifact);
-
+        Debug.Log("chosen: " + chosenArtifact + " translate: " + translateArtifact);
         gui.setTextToDisplay("artifactMode"
                            , translateArtifact
                            , 0);
     }
 
-    public function OnParticleCollision(particles : GameObject)
+    public function OnTriggerEnter(collision : Collider)
     {
-        //TODO: TEST
-        //add influence from particles to ourself
-        //network destroy particles
-        if (particles.tag == "InfluenceOrb")
+        if (collision.gameObject.tag == "InfluenceOrb")
         {
-            var influence : float = particles.GetComponent(InfluenceOrb).getInfluenceContained();
+            Debug.Log("collided with influence orb");
 
-            switch (chosenArtifact)
-            {
+            var influence : float = collision.gameObject.GetComponent(InfluenceOrb).getInfluenceContained();
+            playerInfo.influences.addInfluenceFor(chosenArtifact, influence);
 
-            }
-            playerInfo.influences.addInfluenceFor()
+            Network.Destroy(collision.gameObject);  
         }
     }
 
@@ -117,7 +115,7 @@ public class PlayerMono extends MonoBehaviour
         {
             waitForArtifactChosen();
         }
-        else if (hasShotInfluence && chosenArtifact != 3)
+        else if (hasShotInfluence && chosenArtifact != Artifact.ARTIFACT)
         {
             Debug.Log("Shot influence to server");
 
@@ -137,19 +135,19 @@ public class PlayerMono extends MonoBehaviour
         {
             chosenArtifact = Artifact.CROWN;
         
-            Debug.Log("chose crown");
+            Debug.Log("chose crown" + chosenArtifact);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             chosenArtifact = Artifact.SCEPTER;
         
-            Debug.Log("chose scepter");
+            Debug.Log("chose scepter" + chosenArtifact);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             chosenArtifact = Artifact.AMULET;
         
-            Debug.Log("chose amulet");
+            Debug.Log("chose amulet" + chosenArtifact);
         }
     }
 
