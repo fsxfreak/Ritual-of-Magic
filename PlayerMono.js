@@ -84,7 +84,7 @@ public class PlayerMono extends MonoBehaviour
 
         var translateArtifact : String = Artifact.translate(chosenArtifact);
         gui.setTextToDisplay("artifactMode"
-                           , translateArtifact
+                           , "Artifact mode: " + translateArtifact
                            , 0);
     }
 
@@ -92,8 +92,6 @@ public class PlayerMono extends MonoBehaviour
     {
         if (collision.gameObject.tag == "InfluenceOrb")
         {
-            Debug.Log("collided with influence orb");
-
             var influence : float = collision.gameObject.GetComponent(InfluenceOrb).getInfluenceContained();
             playerInfo.influences.addInfluenceFor(chosenArtifact, influence);
 
@@ -109,14 +107,8 @@ public class PlayerMono extends MonoBehaviour
             fireInfluenceShot();
         }
 
-        if (hasShotInfluence)
-        {
-            waitForArtifactChosen();
-        }
         else if (hasShotInfluence && chosenArtifact != Artifact.ARTIFACT)
         {
-            Debug.Log("Shot influence to server");
-
             GameObject.Find("GameEngineServer").networkView
                 .RPC("attemptInfluence", RPCMode.Server
                    , gameObject.name, otherPlayerName
@@ -160,7 +152,6 @@ public class PlayerMono extends MonoBehaviour
         if (Physics.Raycast(pos, dir, rayInfo, 500.0))
         {
             var trans : Transform = rayInfo.transform;
-            Debug.Log(trans.gameObject.name);
             if (trans.tag == "RitualPlayer")
             {
                 otherPlayerName = trans.gameObject.name;
@@ -353,5 +344,12 @@ public class PlayerMono extends MonoBehaviour
                               , "You have failed to influenced: " + Artifact.translate(chosenArtifact) + "."
                               , 3);
         }
+    }
+
+    //TODO: should be called every 15 seconds or so
+    @RPC
+    public function updateWorldState(state : String)
+    {
+        playerInfo.worldState = state;
     }
 }

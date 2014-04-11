@@ -13,11 +13,14 @@ public class GameEngineServer extends MonoBehaviour
     public var networkedObject : GameObject;
 
     private var players : Hashtable;
-    private var fpcPlayers : Array;
+    private var fpcPlayers : GameObject[];
 
     private var hasControllersAll : boolean;
 
     private var player : GameObject;
+
+    private var WORLD_STATE_UPDATE_INTERVAL : float = 15.0;
+    private var worldStateTimer : TimeInterval = null;
 
     public function Start()
     {
@@ -26,6 +29,7 @@ public class GameEngineServer extends MonoBehaviour
             hasControllersAll = false;
             players = new Hashtable();
             fpcPlayers = new Array();
+            worldStateTimer = new TimeInterval(WORLD_STATE_UPDATE_INTERVAL);
 
             //label each player false if they have not connected yet
             for (var player : NetworkPlayer in Network.connections)
@@ -80,9 +84,16 @@ public class GameEngineServer extends MonoBehaviour
             {
                 player = initializePlayer();    //a player for myself
                 hasControllersAll = true;
+
+                players = GameObject.FindGameObjectsWithTag("RitualPlayer");
             }
 
             updateWorldState();
+            if (worldStateTimer.check())
+            {
+                spreadWorldState();
+                worldStateTimer.start();
+            }
 
             if (Input.GetKeyDown(KeyCode.Tab))
             {
@@ -268,6 +279,16 @@ public class GameEngineServer extends MonoBehaviour
             from.gameObject.networkView.RPC("hasInfluenced"
                                           , player
                                           , "false");
+        }
+    }
+
+    private function spreadWorldState()
+    {
+        var state : String = "";
+        //TODO: RPC all player monos updateWorldState(state)
+        for (var player : GameObject in fpcPlayers)
+        {
+
         }
     }
 }

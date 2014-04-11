@@ -78,4 +78,16 @@ public static class Artifact
             return "amulet";
         }
     }
+
+    //quick and dirty, should insert commas and capitalize accordingly, but no time
+    public function translateMask(artifact : int) : String
+    {
+        var artifacts : String = "";
+        if (artifact & CROWN == CROWN)
+            artifacts += "crown ";
+        if (artifact & SCEPTER == SCEPTER)
+            artifacts += "scepter ";
+        if (artifact & AMULET == AMULET)
+            artifact += "amulet ";
+    }
 }

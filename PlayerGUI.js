@@ -41,14 +41,13 @@ public class PlayerGUI extends MonoBehaviour
                            , scoreboardWidth
                            , scoreboardHeight));
 
-        var artifactModeWidth = 20;
-        var artifactModeHeight = 14;
+        var artifactModeWidth = 100;
+        var artifactModeHeight = 40;
         textRegions.Add("artifactMode"
                       , Rect(Screen.width - artifactModeWidth - PADDING
                            , PADDING
                            , artifactModeWidth
                            , artifactModeHeight));
-
     }
 
     public function setTextToDisplay(key : String, value : String, duration : float)
@@ -106,6 +105,10 @@ public class PlayerGUI extends MonoBehaviour
         if (textToDisplay.Contains("scoreboard"))
         {
             GUI.Label(textRegions["scoreboard"], textToDisplay["scoreboard"] as String);
+        }
+        if (textToDisplay.Contains("artifactMode"))
+        {
+            GUI.Label(textRegions["artifactMode"], textToDisplay["artifactMode"] as String);
         }
     }
 

@@ -13,6 +13,8 @@ public class RitualPlayer
     public var RULES_MARUS             : boolean = false;
     public var RULES_KIDA              : boolean = false;
 
+    public var worldState : String = "";
+
     public function RitualPlayer()
     {
         influences = new ArtifactInfluence();
@@ -31,5 +33,20 @@ public class RitualPlayer
         }
 
         pointValues = new Points(race);
+    }
+
+    public function stringify() : String 
+    {
+        return
+            "You: " + "\n"
+          + "Race: " + Race.translate(race) + "\n"
+          + "Controlled artifacts: " + Artifact.translateMask(influences.artifactMask) + "\n"
+          + "Score: " + calculateScore();
+    }
+
+    public function calculateScore() : int
+    {
+        //parse worldState to get numbers
+        return 0;
     }
 }
