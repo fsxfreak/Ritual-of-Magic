@@ -1,4 +1,4 @@
-﻿#pragma strict
+#pragma strict
 
 public class RitualPlayer
 {
@@ -7,6 +7,7 @@ public class RitualPlayer
     public var race : int;
     public var dead : boolean = false;
 
+    //TODO: Update these player statuses, after artifacts have been obtained or lost
     public var CONTROLS_MONSTER        : boolean = false;
     public var RULES_SORRELL           : boolean = false;
     public var RULES_MARUS             : boolean = false;
