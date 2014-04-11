@@ -9,11 +9,11 @@ public class PlayerMono extends MonoBehaviour
     public var scepterPrefab : GameObject;
 
     private var canShootInfluence : boolean = true;
+    private var timeShotInfluence : float = 0.0;
     private var hasShotInfluence  : boolean = false;
     private var chosenArtifact    : int = 0;
     private var otherPlayerName   : String = "";
 
-    private var startTime : int = 0;
     //GAME BALANCE: TODO
     private var INFLUENCING_COOLDOWN : int = 5; //in seconds
 
@@ -24,7 +24,6 @@ public class PlayerMono extends MonoBehaviour
         gui = transform.Find("GUI").GetComponent(PlayerGUI);
 
         playerInfo = new RitualPlayer();
-        startTime = Time.time;
     }
 
     public function getPlayerInfo() : RitualPlayer { return playerInfo; }
@@ -36,8 +35,7 @@ public class PlayerMono extends MonoBehaviour
             updateGUI();
             waitForArtifactChosen();
             influenceUpdateShot();
-            if ((Time.time - startTime) % INFLUENCING_COOLDOWN > 0
-              && !canShootInfluence)
+            if ((Time.time - timeShotInfluence) < INFLUENCING_COOLDOWN)
             {
                 canShootInfluence = true;
             }            
@@ -48,6 +46,7 @@ public class PlayerMono extends MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
+            //TODO: Display the real scoreboard
             gui.setTextToDisplay("scoreboard"
                 , "tsetselkklslfksjf;sdfklsjdf;lkajf;laksdjfa;sldfbaw;elfa"
                 + "bwel;fkabwel;fkabweflkawbefl;akwebsdfsdfsdfsdfsdfsdfsdf"
@@ -60,7 +59,7 @@ public class PlayerMono extends MonoBehaviour
         {
             gui.removeTextFromDisplay("scoreboard");
         }
-
+        
         if (Input.GetKeyDown(KeyCode.E))
         {
             gui.setTextToDisplay("notification"
@@ -84,7 +83,6 @@ public class PlayerMono extends MonoBehaviour
         }
 
         var translateArtifact : String = Artifact.translate(chosenArtifact);
-        Debug.Log("chosen: " + chosenArtifact + " translate: " + translateArtifact);
         gui.setTextToDisplay("artifactMode"
                            , translateArtifact
                            , 0);
@@ -187,6 +185,8 @@ public class PlayerMono extends MonoBehaviour
                 canShootInfluence = false;
                 hasShotInfluence = false;
             }
+            
+            timeShotInfluence = Time.time;
         }
 
         
@@ -338,16 +338,20 @@ public class PlayerMono extends MonoBehaviour
 
     //Called after every influence attempt from the server
     @RPC
-    public function hasInfluenced(influenceGet : String)
+    public function hasInfluenced(influenceGet : String)    //why unity no boolean rpc
     {
         if (influenceGet == "true")
         {
-            //TODO - Display influence gotten
+            gui.setTextToDisplay("notification"
+                               , "You have influenced: " + Artifact.translate(chosenArtifact) + "."
+                               , 3);
             
         }
         else if (influenceGet == "false")
         {
-            //TODO - Display influence failed!
+            gui.setTextToDisplay("notification"
+                              , "You have failed to influenced: " + Artifact.translate(chosenArtifact) + "."
+                              , 3);
         }
     }
 }
