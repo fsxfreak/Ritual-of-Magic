@@ -88,6 +88,6 @@ public static class Artifact
         if (artifact & SCEPTER == SCEPTER)
             artifacts += "scepter ";
         if (artifact & AMULET == AMULET)
-            artifact += "amulet ";
+            artifacts += "amulet ";
     }
 }

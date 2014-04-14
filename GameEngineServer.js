@@ -19,7 +19,7 @@ public class GameEngineServer extends MonoBehaviour
 
     private var player : GameObject;
 
-    private var WORLD_STATE_UPDATE_INTERVAL : float = 15.0;
+    private var WORLD_STATE_UPDATE_INTERVAL : float = 5.0;
     private var worldStateTimer : TimeInterval = null;
 
     public function Start()
@@ -85,7 +85,7 @@ public class GameEngineServer extends MonoBehaviour
                 player = initializePlayer();    //a player for myself
                 hasControllersAll = true;
 
-                players = GameObject.FindGameObjectsWithTag("RitualPlayer");
+                fpcPlayers = GameObject.FindGameObjectsWithTag("RitualPlayer");
             }
 
             updateWorldState();
@@ -134,9 +134,6 @@ public class GameEngineServer extends MonoBehaviour
 
             RitualState.updateRuling(statuses);
         }
-
-
-
     }
 
     private function initializePlayer() : GameObject
@@ -284,11 +281,14 @@ public class GameEngineServer extends MonoBehaviour
 
     private function spreadWorldState()
     {
-        var state : String = "";
-        //TODO: RPC all player monos updateWorldState(state)
+        //TODO: jsonify the world state
+        var state : String = RitualState.jsonify();
+        Debug.Log("spreading server");
+        Debug.Log(state);
+
         for (var player : GameObject in fpcPlayers)
         {
-
+            player.networkView.RPC("updateWorldState", RPCMode.All, state);
         }
     }
 }

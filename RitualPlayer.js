@@ -46,7 +46,7 @@ public class RitualPlayer
 
     public function calculateScore() : int
     {
-        //parse worldState to get numbers
+        //TODO: parse worldState to get numbers
         return 0;
     }
 }

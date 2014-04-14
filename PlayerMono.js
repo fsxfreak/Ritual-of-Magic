@@ -47,12 +47,7 @@ public class PlayerMono extends MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             //TODO: Display the real scoreboard
-            gui.setTextToDisplay("scoreboard"
-                , "tsetselkklslfksjf;sdfklsjdf;lkajf;laksdjfa;sldfbaw;elfa"
-                + "bwel;fkabwel;fkabweflkawbefl;akwebsdfsdfsdfsdfsdfsdfsdf"
-                + "sdfklsdfa;lwebaowgihasdl;gkjaw;lkgba;wefija;wlkfajl;fka"
-                + "sdkjfabwekfjabwe;fklajsd;glkabwgo;aiwheg;laksjdg;lkasdj"
-                + "\nWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
+            gui.setTextToDisplay("scoreboard", playerInfo.worldState
                 , 0);
         }
         else if (Input.GetKeyUp(KeyCode.Q))
@@ -143,7 +138,6 @@ public class PlayerMono extends MonoBehaviour
 
     private function fireInfluenceShot()
     {
-        //TODO: Fire a shot to influence
         var camera : Transform = transform.Find("Main Camera");
         var pos : Vector3 = camera.position;
         var dir : Vector3 = camera.transform.forward;
@@ -160,8 +154,6 @@ public class PlayerMono extends MonoBehaviour
                 //status variables for shootin influence
                 canShootInfluence = false;
                 hasShotInfluence = true;
-            
-                chosenArtifact = Artifact.ARTIFACT;
             }
             else if (trans.tag == "RitualArtifactPillar")
             {
@@ -334,14 +326,14 @@ public class PlayerMono extends MonoBehaviour
         if (influenceGet == "true")
         {
             gui.setTextToDisplay("notification"
-                               , "You have influenced: " + Artifact.translate(chosenArtifact) + "."
+                               , "You have influenced the winner!: " + Artifact.translate(chosenArtifact) + "."
                                , 3);
             
         }
         else if (influenceGet == "false")
         {
             gui.setTextToDisplay("notification"
-                              , "You have failed to influenced: " + Artifact.translate(chosenArtifact) + "."
+                              , "You have failed to influence, loser.: " + Artifact.translate(chosenArtifact) + "."
                               , 3);
         }
     }

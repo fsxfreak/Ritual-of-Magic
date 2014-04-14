@@ -24,6 +24,7 @@ public class RitualState
 
     public static function updateRuling(statuses : Array)
     {
+        //TODO: Buggy - need to sync RitualPlayer, probably
         for (var status : int in statuses)
         {
             if ((status & ARTIFACT_SORRELL) == ARTIFACT_SORRELL)
@@ -81,5 +82,30 @@ public class RitualState
             + NOBODY_DIES                       + ": NOBODY_DIES\n"
             + MONSTER_RAMPAGES_COUNTRY          + ": MONSTER_RAMPAGES_COUNTRY"
         );
+    }
+
+    public static function jsonify() : String
+    {
+        var state : String = 
+            "{" + 
+                "\"ARTIFACT_SORRELL\":" + ARTIFACT_SORRELL + ","
+              + "\"ARTIFACT_MARUS\":" + ARTIFACT_MARUS + ","
+              + "\"ARTIFACT_KIDA\":" + ARTIFACT_KIDA + ","
+              + "\"RACE_RULES_SORRELL\":" + whoRules(Countries.SORRELL) + ","
+              + "\"RACE_RULES_MARUS\":" + whoRules(Countries.MARUS) + ","
+              + "\"RACE_RULES_KIDA\":" + whoRules(Countries.KIDA) + ","
+              + "\"WOLF_CONTROLS_MONSTER\":" + WOLF_CONTROLS_MONSTER + ","
+              + "\"WOLF_DIES\":" + WOLF_DIES + ","
+              + "\"DRAGON_CONTROLS_MONSTER\":" + DRAGON_CONTROLS_MONSTER + ","
+              + "\"DRAGON_DIES\":" + DRAGON_DIES + ","
+              + "\"EAGLE_CONTROLS_MONSTER\":" + EAGLE_CONTROLS_MONSTER + ","
+              + "\"EAGLE_DIES\":" + EAGLE_DIES + ","
+              + "\"MONSTER_BANISHED\":" + MONSTER_BANISHED + ","
+              + "\"AT_LEAST_ONE_COUNTRY_NO_RULER\":" + AT_LEAST_ONE_COUNTRY_NO_RULER + ","
+              + "\"NOBODY_DIES\":" + NOBODY_DIES + ","
+              + "\"MONSTER_RAMPAGES_COUNTRY\":" + MONSTER_RAMPAGES_COUNTRY
+          + "}";
+
+        return state;
     }
 }
