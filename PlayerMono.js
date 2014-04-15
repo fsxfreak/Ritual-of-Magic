@@ -18,10 +18,13 @@ public class PlayerMono extends MonoBehaviour
     private var INFLUENCING_COOLDOWN : int = 5; //in seconds
 
     private var gui : PlayerGUI;
+    private var timedUpdateThis : TimeInterval;
 
     public function Awake()
     {
         gui = transform.Find("GUI").GetComponent(PlayerGUI);
+        timedUpdateThis = new TimeInterval(15.0);
+        timedUpdateThis.start();
 
         playerInfo = new RitualPlayer();
     }
@@ -38,6 +41,12 @@ public class PlayerMono extends MonoBehaviour
             if ((Time.time - timeShotInfluence) < INFLUENCING_COOLDOWN)
             {
                 canShootInfluence = true;
+            }
+
+            if (timedUpdateThis.check())
+            {
+                updatePlayerStatus();
+                timedUpdateThis.start();
             }            
         }     
     }
@@ -338,10 +347,55 @@ public class PlayerMono extends MonoBehaviour
         }
     }
 
-    //TODO: should be called every 15 seconds or so
     @RPC
     public function updateWorldState(state : String)
     {
         playerInfo.worldState = state;
     }
+
+    //TODO: use rpc to update all variables
+    public function updatePlayerStatus()
+    {
+        var rp : RitualPlayer = playerInfo;
+
+        networkView.RPC("updateThis", RPCMode.All, this.gameObject.name
+                      , rp.influences.getInfluenceFor(Artifact.CROWN)
+                      , rp.influences.getInfluenceFor(Artifact.AMULET)
+                      , rp.influences.getInfluenceFor(Artifact.SCEPTER)
+                      , rp.influences.artifactMask
+                      , rp.dead
+                      , rp.CONTROLS_MONSTER
+                      , rp.RULES_SORRELL
+                      , rp.RULES_MARUS
+                      , rp.RULES_KIDA);
+    }
+
+    //this gon be a lot of parameters
+    @RPC
+    public function updateThis(fpcName : String
+                             , crownInfluence : float
+                             , scepterInfluence : float
+                             , amuletInfluence : float
+                             , artifactMask : int
+                             , isDead : boolean
+                             , controlsMonster : boolean
+                             , rulesSorrell : boolean
+                             , rulesMarus : boolean
+                             , rulesKida : boolean)
+    {
+        if (fpcName == this.gameObject.name)
+        {
+            var rp : RitualPlayer = playerInfo;
+            rp.influences.setInfluenceFor(Artifact.CROWN, crownInfluence);
+            rp.influences.setInfluenceFor(Artifact.SCEPTER, scepterInfluence);
+            rp.influences.setInfluenceFor(Artifact.AMULET, amuletInfluence);
+            rp.influences.artifactMask = artifactMask;
+            rp.dead = isDead;
+            rp.CONTROLS_MONSTER = controlsMonster;
+            rp.RULES_SORRELL = rulesSorrell;
+            rp.RULES_MARUS = rulesSorrell;
+            rp.RULES_KIDA = rulesKida;
+        }
+    }
+
 }

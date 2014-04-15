@@ -35,7 +35,7 @@ public class ArtifactInfluence
         return 0.0;
     }
 
-    public function setInfluenceFor(artifact : Artifact, amount : float)
+    public function setInfluenceFor(artifact : int, amount : float)
     {
         switch (artifact)
         {
