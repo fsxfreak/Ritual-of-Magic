@@ -281,8 +281,7 @@ public class GameEngineServer extends MonoBehaviour
 
     private function spreadWorldState()
     {
-        //TODO: jsonify the world state
-        var state : String = RitualState.jsonify();
+        var state : String = RitualState.csvify();
         Debug.Log("spreading server");
         Debug.Log(state);
 

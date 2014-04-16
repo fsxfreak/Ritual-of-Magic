@@ -14,6 +14,8 @@ public class PlayerMono extends MonoBehaviour
     private var chosenArtifact    : int = 0;
     private var otherPlayerName   : String = "";
 
+    private var stateInitialized  : boolean = false;
+
     //GAME BALANCE: TODO
     private var INFLUENCING_COOLDOWN : int = 5; //in seconds
 
@@ -55,9 +57,10 @@ public class PlayerMono extends MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            //TODO: Display the real scoreboard
-            gui.setTextToDisplay("scoreboard", playerInfo.worldState
-                , 0);
+            if (stateInitialized)
+                gui.setTextToDisplay("scoreboard"
+                                   , playerInfo.beautifiedHashWorldState()
+                                   , 0);
         }
         else if (Input.GetKeyUp(KeyCode.Q))
         {
@@ -67,7 +70,7 @@ public class PlayerMono extends MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             gui.setTextToDisplay("notification"
-                               , "artifact: " + playerInfo.influences.artifactMask
+                               , playerInfo.calculateScore().ToString()
                                , 0);
         }
         else if (Input.GetKeyUp(KeyCode.E))
@@ -79,7 +82,7 @@ public class PlayerMono extends MonoBehaviour
         {
             gui.setTextToDisplay("goal"
                                , playerInfo.pointValues.stringify()
-                               , 0);
+                               , 0.0);
         }
         else if (Input.GetKeyUp(KeyCode.R))
         {
@@ -351,9 +354,10 @@ public class PlayerMono extends MonoBehaviour
     public function updateWorldState(state : String)
     {
         playerInfo.worldState = state;
+        playerInfo.hashWorldState();
+        stateInitialized = true;
     }
 
-    //TODO: use rpc to update all variables
     public function updatePlayerStatus()
     {
         var rp : RitualPlayer = playerInfo;

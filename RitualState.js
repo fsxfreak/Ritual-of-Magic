@@ -9,13 +9,8 @@ public class RitualState
     public static var RACE_RULES_SORRELL      : int = 0;
     public static var RACE_RULES_MARUS        : int = 0;
     public static var RACE_RULES_KIDA         : int = 0;
-
-    public static var WOLF_CONTROLS_MONSTER   : boolean = false;
-    public static var WOLF_DIES               : boolean = false;
-    public static var DRAGON_CONTROLS_MONSTER : boolean = false;
-    public static var DRAGON_DIES             : boolean = false;
-    public static var EAGLE_CONTROLS_MONSTER  : boolean = false;
-    public static var EAGLE_DIES              : boolean = false;
+    public static var RACE_CONTROLS_MONSTER   : int = 0;
+    public static var RACES_DEAD              : int = 0;
 
     public static var MONSTER_BANISHED        : boolean = false;
     public static var AT_LEAST_ONE_COUNTRY_NO_RULER : boolean = true;
@@ -65,46 +60,33 @@ public class RitualState
     public static function printStatus()
     {
         Debug.Log(
-              ARTIFACT_SORRELL                  + ": ARTIFACT_SORRELL\n"
-            + ARTIFACT_MARUS                    + ": ARTIFACT_MARUS\n"
-            + ARTIFACT_KIDA                     + ": ARTIFACT_KIDA\n"
-            + whoRules(Countries.SORRELL)       + ": RACE_RULES_SORRELL\n"
-            + whoRules(Countries.MARUS)         + ": RACE_RULES_MARUS\n"
-            + whoRules(Countries.KIDA)          + ": RACE_RULES_KIDA\n"
-            + WOLF_CONTROLS_MONSTER             + ": WOLF_CONTROLS_MONSTER\n"
-            + WOLF_DIES                         + ": WOLF_DIES\n"
-            + DRAGON_CONTROLS_MONSTER           + ": DRAGON_CONTROLS_MONSTER\n"
-            + DRAGON_DIES                       + ": DRAGON_DIES\n"
-            + EAGLE_CONTROLS_MONSTER            + ": EAGLE_CONTROLS_MONSTER\n"
-            + EAGLE_DIES                        + ": EAGLE_DIES\n"
-            + MONSTER_BANISHED                  + ": MONSTER_BANISHED\n"
-            + AT_LEAST_ONE_COUNTRY_NO_RULER     + ": AT_LEAST_ONE_COUNTRY_NO_RULER\n"
-            + NOBODY_DIES                       + ": NOBODY_DIES\n"
-            + MONSTER_RAMPAGES_COUNTRY          + ": MONSTER_RAMPAGES_COUNTRY"
+              ARTIFACT_SORRELL                  + ":ARTIFACT_SORRELL\n"
+            + ARTIFACT_MARUS                    + ":ARTIFACT_MARUS\n"
+            + ARTIFACT_KIDA                     + ":ARTIFACT_KIDA\n"
+            + whoRules(Countries.SORRELL)       + ":RACE_RULES_SORRELL\n"
+            + whoRules(Countries.MARUS)         + ":RACE_RULES_MARUS\n"
+            + whoRules(Countries.KIDA)          + ":RACE_RULES_KIDA\n"
+            + RACE_CONTROLS_MONSTER             + ":RACE_CONTROLS_MONSTER\n"
+            + RACES_DEAD                        + ":RACES_DEAD\n"
+            + MONSTER_BANISHED                  + ":MONSTER_BANISHED\n"
+            + AT_LEAST_ONE_COUNTRY_NO_RULER     + ":AT_LEAST_ONE_COUNTRY_NO_RULER\n"
+            + NOBODY_DIES                       + ":NOBODY_DIES\n"
+            + MONSTER_RAMPAGES_COUNTRY          + ":MONSTER_RAMPAGES_COUNTRY"
         );
     }
 
-    public static function jsonify() : String
+    public static function csvify() : String
     {
         var state : String = 
-            "{" + 
-                "\"ARTIFACT_SORRELL\":" + ARTIFACT_SORRELL + ","
-              + "\"ARTIFACT_MARUS\":" + ARTIFACT_MARUS + ","
-              + "\"ARTIFACT_KIDA\":" + ARTIFACT_KIDA + ","
-              + "\"RACE_RULES_SORRELL\":" + whoRules(Countries.SORRELL) + ","
-              + "\"RACE_RULES_MARUS\":" + whoRules(Countries.MARUS) + ","
-              + "\"RACE_RULES_KIDA\":" + whoRules(Countries.KIDA) + ","
-              + "\"WOLF_CONTROLS_MONSTER\":" + WOLF_CONTROLS_MONSTER + ","
-              + "\"WOLF_DIES\":" + WOLF_DIES + ","
-              + "\"DRAGON_CONTROLS_MONSTER\":" + DRAGON_CONTROLS_MONSTER + ","
-              + "\"DRAGON_DIES\":" + DRAGON_DIES + ","
-              + "\"EAGLE_CONTROLS_MONSTER\":" + EAGLE_CONTROLS_MONSTER + ","
-              + "\"EAGLE_DIES\":" + EAGLE_DIES + ","
-              + "\"MONSTER_BANISHED\":" + MONSTER_BANISHED + ","
-              + "\"AT_LEAST_ONE_COUNTRY_NO_RULER\":" + AT_LEAST_ONE_COUNTRY_NO_RULER + ","
-              + "\"NOBODY_DIES\":" + NOBODY_DIES + ","
-              + "\"MONSTER_RAMPAGES_COUNTRY\":" + MONSTER_RAMPAGES_COUNTRY
-          + "}";
+                "RACE_RULES_SORRELL:" + whoRules(Countries.SORRELL) + ","
+              + "RACE_RULES_MARUS:" + whoRules(Countries.MARUS) + ","
+              + "RACE_RULES_KIDA:" + whoRules(Countries.KIDA) + ","
+              + "RACE_CONTROLS_MONSTER:" + RACE_CONTROLS_MONSTER + ","
+              + "RACES_DEAD:" + RACES_DEAD + ","
+              + "MONSTER_BANISHED:" + MONSTER_BANISHED + ","
+              + "AT_LEAST_ONE_COUNTRY_NO_RULER:" + AT_LEAST_ONE_COUNTRY_NO_RULER + ","
+              + "NOBODY_DIES:" + NOBODY_DIES + ","
+              + "MONSTER_RAMPAGES_COUNTRY:" + MONSTER_RAMPAGES_COUNTRY;
 
         return state;
     }

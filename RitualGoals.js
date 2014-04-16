@@ -54,6 +54,23 @@ public static class Race
             return "wolf";
         case DRAGON_MASTER:
             return "dragon";
+        default:
+            return "";
+        }
+    }
+
+    public function translate(race : String) : int
+    {
+        switch (race)
+        {
+        case "eagle":
+            return EAGLE_LORD;
+        case "wolf":
+            return WOLF_MAGE;
+        case "dragon":
+            return DRAGON_MASTER;
+        default:
+            return 0;
         }
     }
 }
