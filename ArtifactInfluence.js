@@ -67,6 +67,22 @@ public class ArtifactInfluence
         }
     }
 
+    public function takeInfluenceFor(artifact : int, amount : float)
+    {
+        switch (artifact)
+        {
+        case Artifact.CROWN:
+            crown.setInfluence(crown.getInfluence() - amount);
+            break;
+        case Artifact.SCEPTER:
+            scepter.setInfluence(scepter.getInfluence() - amount);
+            break;
+        case Artifact.AMULET:
+            amulet.setInfluence(amulet.getInfluence() - amount);
+            break;
+        }
+    }
+
     public function addInfluenceAll(amount : float)
     {
         crown.setInfluence(crown.getInfluence() + amount);

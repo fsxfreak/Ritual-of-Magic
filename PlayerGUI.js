@@ -25,8 +25,8 @@ public class PlayerGUI extends MonoBehaviour
                            , goalsWidth
                            , goalsHeight));
 
-        var notificationWidth = 200;
-        var notificationHeight = 30;
+        var notificationWidth = 300;
+        var notificationHeight = 60;
         textRegions.Add("notification"
                       , Rect(Screen.width - notificationWidth - PADDING
                            , Screen.height - notificationHeight - PADDING

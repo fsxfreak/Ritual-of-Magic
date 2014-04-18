@@ -22,6 +22,9 @@ public class GameEngineServer extends MonoBehaviour
     private var WORLD_STATE_UPDATE_INTERVAL : float = 5.0;
     private var worldStateTimer : TimeInterval = null;
 
+    //TODO GAME BALANCE
+    private var INFLUENCE_DIFFERENCE_EPSILON : float = 1.25;
+
     public function Start()
     {
         if (Network.isServer)
@@ -78,6 +81,14 @@ public class GameEngineServer extends MonoBehaviour
 
     public function Update()
     {
+        var averageRandom : float = 0;
+        for (var i : int = 0; i < 1000; i++)
+        {
+            averageRandom += rollValue();
+        }
+        Debug.Log(averageRandom / 1000.0);  //0.41
+
+        Debug.Log(averageRandom);
         if (Network.isServer)
         {
             if (checkAllPlayersConnected() && !hasControllersAll)
@@ -171,10 +182,6 @@ public class GameEngineServer extends MonoBehaviour
     @RPC
     public function attemptInfluencePillar(fromName : String, toName : String)
     {
-        Debug.Log("attemptInfluencePillar called with: "
-                + "fromName: " + fromName + " "
-                + "toName: " + toName + ".");
-
         var from : PlayerMono = GameObject.Find(fromName).GetComponent(PlayerMono);
         var to   : ArtifactPillar = GameObject.Find(toName).GetComponent(ArtifactPillar);
 
@@ -188,13 +195,15 @@ public class GameEngineServer extends MonoBehaviour
         var toInfluence   : float
             = to.getInfluence();
 
-        //TODO GAME BALANCE
-        var rollNeededForSuccess : float = toInfluence - fromInfluence;
+        var rollNeededForSuccess : float = (toInfluence - fromInfluence) * INFLUENCE_DIFFERENCE_EPSILON;
         rollNeededForSuccess = rollNeededForSuccess < 0 
                              ? 0 
                              : rollNeededForSuccess;
-
-        var roll : float = Random.value;
+        var roll : float = rollValue();
+        Debug.Log("to influence: " + toInfluence);
+        Debug.Log("from influence: " + fromInfluence);
+        Debug.Log("rollNeededForSuccess: " + rollNeededForSuccess + "\n"
+                + "roll: " + roll);
 
         //if pillar influence = 0, artifact already taken from it
         if (roll > rollNeededForSuccess && to.getInfluence() > 0)
@@ -221,11 +230,6 @@ public class GameEngineServer extends MonoBehaviour
     public function attemptInfluence(fromName : String, toName : String
                                    , artifact : int)
     {
-        Debug.Log("attemptInfluence called with: "
-                + "fromName: " + fromName + " "
-                + "toName: " + toName + " "
-                + "artifact: " + artifact + ".");
-
         var from : PlayerMono = GameObject.Find(fromName).GetComponent(PlayerMono);
         var to : PlayerMono = GameObject.Find(toName).GetComponent(PlayerMono);
 
@@ -237,18 +241,16 @@ public class GameEngineServer extends MonoBehaviour
         var toInfluence : float = 
             to.getPlayerInfo().influences.getInfluenceFor(artifact);
 
-        Debug.Log("from influence: " + fromInfluence);
-        Debug.Log("to influence: " + toInfluence);
-
-        //TODO GAME BALANCE
-        var rollNeededForSuccess : float = toInfluence - fromInfluence;
+        var rollNeededForSuccess : float = (toInfluence - fromInfluence) * INFLUENCE_DIFFERENCE_EPSILON;
         rollNeededForSuccess = rollNeededForSuccess < 0 
                              ? 0 
                              : rollNeededForSuccess;
 
-        Debug.Log("rollNeededForSuccess " + rollNeededForSuccess);
-
-        var roll : float = Random.value;
+        var roll : float = rollValue();
+        Debug.Log("to influence: " + toInfluence);
+        Debug.Log("from influence: " + fromInfluence);
+        Debug.Log("rollNeededForSuccess: " + rollNeededForSuccess + "\n"
+                + "roll: " + roll);
 
         if (roll > rollNeededForSuccess
          && to.getPlayerInfo().influences.hasArtifact(artifact))
@@ -259,15 +261,13 @@ public class GameEngineServer extends MonoBehaviour
             from.gameObject.networkView.RPC("gotArtifact"
                                           , player
                                           , artifact);
-            //TODO: Holder gets influence bonus?
+
             if (Network.isServer)
             {
-                Debug.Log("server RPC to self lostArtifact");
                 this.player.GetComponent(PlayerMono).lostArtifact(artifact);
             }
             else
             {
-                Debug.Log("client RPC " + toPlayer + " lost artifact");
                 to.lostArtifact(artifact);
             }
         }
@@ -282,12 +282,14 @@ public class GameEngineServer extends MonoBehaviour
     private function spreadWorldState()
     {
         var state : String = RitualState.csvify();
-        Debug.Log("spreading server");
-        Debug.Log(state);
-
         for (var player : GameObject in fpcPlayers)
         {
             player.networkView.RPC("updateWorldState", RPCMode.All, state);
         }
+    }
+
+    private function rollValue() : float
+    {
+        return Random.value * Random.value + (Random.value * 0.35);
     }
 }

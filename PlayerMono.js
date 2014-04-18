@@ -11,13 +11,16 @@ public class PlayerMono extends MonoBehaviour
     private var canShootInfluence : boolean = true;
     private var timeShotInfluence : float = 0.0;
     private var hasShotInfluence  : boolean = false;
-    private var chosenArtifact    : int = 0;
+    private var chosenArtifact    : int = Artifact.AMULET;
     private var otherPlayerName   : String = "";
 
     private var stateInitialized  : boolean = false;
 
     //GAME BALANCE: TODO
-    private var INFLUENCING_COOLDOWN : int = 5; //in seconds
+    private var INFLUENCING_COOLDOWN : float = 10.0;
+    private var influenceCooldown : TimeInterval; //in seconds
+    //TODO GAME BALANCE
+    private var INFLUENCE_BONUS : float = 0.2;
 
     private var gui : PlayerGUI;
     private var timedUpdateThis : TimeInterval;
@@ -25,6 +28,10 @@ public class PlayerMono extends MonoBehaviour
     public function Awake()
     {
         gui = transform.Find("GUI").GetComponent(PlayerGUI);
+
+        influenceCooldown = new TimeInterval(INFLUENCING_COOLDOWN);
+        influenceCooldown.start();
+
         timedUpdateThis = new TimeInterval(15.0);
         timedUpdateThis.start();
 
@@ -40,10 +47,11 @@ public class PlayerMono extends MonoBehaviour
             updateGUI();
             waitForArtifactChosen();
             influenceUpdateShot();
-            if ((Time.time - timeShotInfluence) < INFLUENCING_COOLDOWN)
-            {
+
+            if (influenceCooldown.check())
                 canShootInfluence = true;
-            }
+            else
+                canShootInfluence = false;
 
             if (timedUpdateThis.check())
             {
@@ -101,7 +109,7 @@ public class PlayerMono extends MonoBehaviour
         {
             var influence : float = collision.gameObject.GetComponent(InfluenceOrb).getInfluenceContained();
             playerInfo.influences.addInfluenceFor(chosenArtifact, influence);
-
+            Debug.Log("added influence for: " + Artifact.translate(chosenArtifact) + " " + influence);
             Network.Destroy(collision.gameObject);  
         }
     }
@@ -111,9 +119,10 @@ public class PlayerMono extends MonoBehaviour
         //TODO: can only press the fire button every period interval
         if (Input.GetKeyDown(KeyCode.F) && canShootInfluence)
         {
-            fireInfluenceShot();
-        }
 
+            fireInfluenceShot();
+            influenceCooldown.start();
+        }
         else if (hasShotInfluence && chosenArtifact != Artifact.ARTIFACT)
         {
             GameObject.Find("GameEngineServer").networkView
@@ -122,7 +131,6 @@ public class PlayerMono extends MonoBehaviour
                    , chosenArtifact);
 
             hasShotInfluence = false;
-        
         }
     }
 
@@ -131,20 +139,14 @@ public class PlayerMono extends MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             chosenArtifact = Artifact.CROWN;
-        
-            Debug.Log("chose crown" + chosenArtifact);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             chosenArtifact = Artifact.SCEPTER;
-        
-            Debug.Log("chose scepter" + chosenArtifact);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             chosenArtifact = Artifact.AMULET;
-        
-            Debug.Log("chose amulet" + chosenArtifact);
         }
     }
 
@@ -171,8 +173,6 @@ public class PlayerMono extends MonoBehaviour
             {
                 var artifactPillar : String = trans.gameObject.name;
 
-                Debug.Log("attempting influence on pillar");
-
                 GameObject.Find("GameEngineServer").networkView
                 .RPC("attemptInfluencePillar", RPCMode.Server
                    , gameObject.name, artifactPillar);
@@ -191,7 +191,6 @@ public class PlayerMono extends MonoBehaviour
     @RPC
     public function gotArtifact(artifact : int)
     {
-        Debug.Log("got artifact: " + artifact);
         switch (artifact)
         {
         case Artifact.CROWN:
@@ -213,6 +212,7 @@ public class PlayerMono extends MonoBehaviour
             crown.GetComponent(NetworkedObject).instantiatedBy
                 = this.gameObject.name;
 
+            playerInfo.influences.addInfluenceFor(artifact, INFLUENCE_BONUS);
             break;
         case Artifact.SCEPTER:
             playerInfo.influences.artifactMask |= Artifact.SCEPTER;
@@ -233,6 +233,7 @@ public class PlayerMono extends MonoBehaviour
             scepter.GetComponent(NetworkedObject).instantiatedBy
                 = this.gameObject.name;
 
+            playerInfo.influences.addInfluenceFor(artifact, INFLUENCE_BONUS);
             break;
         case Artifact.AMULET:
             playerInfo.influences.artifactMask |= Artifact.AMULET;
@@ -253,6 +254,7 @@ public class PlayerMono extends MonoBehaviour
             amulet.GetComponent(NetworkedObject).instantiatedBy 
                 = this.gameObject.name;
 
+            playerInfo.influences.addInfluenceFor(artifact, INFLUENCE_BONUS);
             break;
         }
     }
@@ -261,8 +263,6 @@ public class PlayerMono extends MonoBehaviour
     @RPC
     public function lostArtifact(artifact : int)
     {
-        Debug.Log("lost artifact: " + artifact);
-
         switch (artifact)
         {
         case Artifact.CROWN:
@@ -282,9 +282,8 @@ public class PlayerMono extends MonoBehaviour
 
             if (crown)
                 Network.Destroy(crown.gameObject);
-            else
-                Debug.Log("did not find crown.");
 
+            playerInfo.influences.takeInfluenceFor(artifact, INFLUENCE_BONUS);
             break;
         case Artifact.SCEPTER:
             playerInfo.influences.artifactMask &= ~Artifact.SCEPTER;
@@ -303,9 +302,8 @@ public class PlayerMono extends MonoBehaviour
 
             if (scepter)
                 Network.Destroy(scepter.gameObject);
-            else 
-                Debug.Log("did not find sccepter");
 
+            playerInfo.influences.takeInfluenceFor(artifact, INFLUENCE_BONUS);
             break;
         case Artifact.AMULET:
             playerInfo.influences.artifactMask &= ~Artifact.AMULET;
@@ -324,9 +322,8 @@ public class PlayerMono extends MonoBehaviour
 
             if (amulet)
                 Network.Destroy(amulet.gameObject);
-            else
-                Debug.Log("did not find amulet");
 
+            playerInfo.influences.takeInfluenceFor(artifact, INFLUENCE_BONUS);
             break;
         }
     }
@@ -338,14 +335,14 @@ public class PlayerMono extends MonoBehaviour
         if (influenceGet == "true")
         {
             gui.setTextToDisplay("notification"
-                               , "You have influenced the winner!: " + Artifact.translate(chosenArtifact) + "."
+                               , "You have influenced the: " + Artifact.translate(chosenArtifact) + "."
                                , 3);
             
         }
         else if (influenceGet == "false")
         {
             gui.setTextToDisplay("notification"
-                              , "You have failed to influence, loser.: " + Artifact.translate(chosenArtifact) + "."
+                              , "You have failed to influence the: " + Artifact.translate(chosenArtifact) + "."
                               , 3);
         }
     }

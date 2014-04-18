@@ -60,8 +60,6 @@ public class RitualPlayer
                 state[name] = value;
             else
                 state.Add(name, value);
-
-            Debug.Log(name + ":" + state[name]);
         }
     }
 
@@ -80,7 +78,6 @@ public class RitualPlayer
         var monsterRampagesCountry : boolean = boolean.Parse(state["MONSTER_RAMPAGES_COUNTRY"]);
 
         var score : int = 0;
-        //HERE IT COMES BRACE YOURSELF
         switch (rulerSorrell)
         {
         case Race.EAGLE_LORD:
