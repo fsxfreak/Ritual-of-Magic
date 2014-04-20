@@ -89,4 +89,12 @@ public class ArtifactInfluence
         scepter.setInfluence(scepter.getInfluence() + amount);
         amulet.setInfluence(amulet.getInfluence() + amount);
     }
+
+    public function stringify() : String
+    {
+        return
+            "Crown influence: " + crown.getInfluence() + "\n"
+          + "Scepter influence: " + scepter.getInfluence() + "\n"
+          + "Amulet influence: " + amulet.getInfluence();
+    }
 }
