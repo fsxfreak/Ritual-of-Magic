@@ -17,10 +17,8 @@ public class PlayerMono extends MonoBehaviour
     private var stateInitialized  : boolean = false;
 
     //GAME BALANCE: TODO
-    private var INFLUENCING_COOLDOWN : float = 10.0;
+    private var INFLUENCING_COOLDOWN : float = 1.0;
     private var influenceCooldown : TimeInterval; //in seconds
-    //TODO GAME BALANCE
-    private var INFLUENCE_BONUS : float = 0.2;
 
     private var gui : PlayerGUI;
     private var timedUpdateThis : TimeInterval;
@@ -77,13 +75,17 @@ public class PlayerMono extends MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.E))
         {
-            gui.setTextToDisplay("notification"
-                               , playerInfo.calculateScore().ToString()
+            gui.setTextToDisplay("scoreboard"
+                               , playerInfo.stringify()
                                , 0);
+            gui.setTextToDisplay("goal"
+                               , playerInfo.pointValues.stringify()
+                               , 0.0);
         }
         else if (Input.GetKeyUp(KeyCode.E))
         {
-            gui.removeTextFromDisplay("notification");
+            gui.removeTextFromDisplay("scoreboard");
+            gui.removeTextFromDisplay("goal");
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -110,16 +112,14 @@ public class PlayerMono extends MonoBehaviour
             var influence : float = collision.gameObject.GetComponent(InfluenceOrb).getInfluenceContained();
             playerInfo.influences.addInfluenceFor(chosenArtifact, influence);
             Debug.Log("added influence for: " + Artifact.translate(chosenArtifact) + " " + influence);
-            Network.Destroy(collision.gameObject);  
+            collision.gameObject.GetComponent(InfluenceOrb).disable();
         }
     }
 
     private function influenceUpdateShot()
     {
-        //TODO: can only press the fire button every period interval
         if (Input.GetKeyDown(KeyCode.F) && canShootInfluence)
         {
-
             fireInfluenceShot();
             influenceCooldown.start();
         }
@@ -212,7 +212,6 @@ public class PlayerMono extends MonoBehaviour
             crown.GetComponent(NetworkedObject).instantiatedBy
                 = this.gameObject.name;
 
-            playerInfo.influences.addInfluenceFor(artifact, INFLUENCE_BONUS);
             break;
         case Artifact.SCEPTER:
             playerInfo.influences.artifactMask |= Artifact.SCEPTER;
@@ -233,7 +232,6 @@ public class PlayerMono extends MonoBehaviour
             scepter.GetComponent(NetworkedObject).instantiatedBy
                 = this.gameObject.name;
 
-            playerInfo.influences.addInfluenceFor(artifact, INFLUENCE_BONUS);
             break;
         case Artifact.AMULET:
             playerInfo.influences.artifactMask |= Artifact.AMULET;
@@ -254,7 +252,6 @@ public class PlayerMono extends MonoBehaviour
             amulet.GetComponent(NetworkedObject).instantiatedBy 
                 = this.gameObject.name;
 
-            playerInfo.influences.addInfluenceFor(artifact, INFLUENCE_BONUS);
             break;
         }
     }
@@ -283,7 +280,6 @@ public class PlayerMono extends MonoBehaviour
             if (crown)
                 Network.Destroy(crown.gameObject);
 
-            playerInfo.influences.takeInfluenceFor(artifact, INFLUENCE_BONUS);
             break;
         case Artifact.SCEPTER:
             playerInfo.influences.artifactMask &= ~Artifact.SCEPTER;
@@ -303,7 +299,6 @@ public class PlayerMono extends MonoBehaviour
             if (scepter)
                 Network.Destroy(scepter.gameObject);
 
-            playerInfo.influences.takeInfluenceFor(artifact, INFLUENCE_BONUS);
             break;
         case Artifact.AMULET:
             playerInfo.influences.artifactMask &= ~Artifact.AMULET;
@@ -323,7 +318,6 @@ public class PlayerMono extends MonoBehaviour
             if (amulet)
                 Network.Destroy(amulet.gameObject);
 
-            playerInfo.influences.takeInfluenceFor(artifact, INFLUENCE_BONUS);
             break;
         }
     }
@@ -368,7 +362,8 @@ public class PlayerMono extends MonoBehaviour
                       , rp.CONTROLS_MONSTER
                       , rp.RULES_SORRELL
                       , rp.RULES_MARUS
-                      , rp.RULES_KIDA);
+                      , rp.RULES_KIDA
+                      , rp.race);
     }
 
     //this gon be a lot of parameters
@@ -382,7 +377,8 @@ public class PlayerMono extends MonoBehaviour
                              , controlsMonster : boolean
                              , rulesSorrell : boolean
                              , rulesMarus : boolean
-                             , rulesKida : boolean)
+                             , rulesKida : boolean
+                             , race : int)
     {
         if (fpcName == this.gameObject.name)
         {
@@ -396,6 +392,7 @@ public class PlayerMono extends MonoBehaviour
             rp.RULES_SORRELL = rulesSorrell;
             rp.RULES_MARUS = rulesSorrell;
             rp.RULES_KIDA = rulesKida;
+            rp.race = race;
         }
     }
 

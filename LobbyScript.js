@@ -18,7 +18,6 @@ public class LobbyScript extends MonoBehaviour
 			if (startGameButton == null)
 			{
 				startGameButton = GameObject.Find("startGame");
-				Debug.Log("startGame should be initialized");
 			}
 		}
 	}
@@ -32,7 +31,6 @@ public class LobbyScript extends MonoBehaviour
 			{
 				if (startGameButton.GetComponent(GUITexture).HitTest(e.mousePosition))
 				{
-					Debug.Log("start game");
 					startGame();
 				}				
 			}
@@ -47,8 +45,6 @@ public class LobbyScript extends MonoBehaviour
 	@RPC
 	public function loadLevel(level : String)
 	{
-		Debug.Log("loading level1");
-
 		Network.SetSendingEnabled(0, false);
 		Network.isMessageQueueRunning = false;
 		Application.LoadLevel(level);
@@ -64,10 +60,5 @@ public class LobbyScript extends MonoBehaviour
 		}
 
 		Destroy(gameObject);
-	}
-
-	public function OnDisconnectedFromServer()
-	{
-		Debug.Log("disconnected in level1");
 	}
 }

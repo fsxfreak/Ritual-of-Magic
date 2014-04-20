@@ -19,7 +19,6 @@ public class RitualState
 
     public static function updateRuling(statuses : Array)
     {
-        //TODO: Buggy - need to sync RitualPlayer, probably
         for (var status : int in statuses)
         {
             if ((status & ARTIFACT_SORRELL) == ARTIFACT_SORRELL)

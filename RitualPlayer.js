@@ -40,9 +40,9 @@ public class RitualPlayer
     public function stringify() : String 
     {
         return
-            "You: " + "\n"
-          + "Race: " + Race.translate(race) + "\n"
+            "Your race: " + Race.translate(race) + "\n"
           + "Controlled artifacts: " + Artifact.translateMask(influences.artifactMask) + "\n"
+          + influences.stringify() + "\n"
           + "Score: " + calculateScore();
     }
 

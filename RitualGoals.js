@@ -100,11 +100,13 @@ public static class Artifact
     public function translateMask(artifact : int) : String
     {
         var artifacts : String = "";
-        if (artifact & CROWN == CROWN)
+        if ((artifact & CROWN) == CROWN)
             artifacts += "crown ";
-        if (artifact & SCEPTER == SCEPTER)
+        if ((artifact & SCEPTER) == SCEPTER)
             artifacts += "scepter ";
-        if (artifact & AMULET == AMULET)
+        if ((artifact & AMULET) == AMULET)
             artifacts += "amulet ";
+
+        return artifacts;
     }
 }

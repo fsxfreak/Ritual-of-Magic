@@ -23,13 +23,11 @@ public class Server extends MonoBehaviour
 		{
 			if (startServerButton.HitTest(e.mousePosition))
 			{
-				Debug.Log("start serve");
 				startServer();
 				Application.LoadLevel("lobby");
 			}				
 			if (joinServerButton.HitTest(e.mousePosition))
 			{
-				Debug.Log("join serve");
 				joinServer();
 			}
 		}
@@ -48,8 +46,6 @@ public class Server extends MonoBehaviour
 	@RPC
 	public function loadLevel(level : String)
 	{
-		Debug.Log("loading level1");
-
 		Network.SetSendingEnabled(0, false);
 		Network.isMessageQueueRunning = false;
 		Application.LoadLevel(level);
@@ -63,10 +59,5 @@ public class Server extends MonoBehaviour
 		{
 			go.SendMessage("OnNetworkLoadedLevel", SendMessageOptions.DontRequireReceiver);
 		}
-	}
-
-	public function OnDisconnectedFromServer()
-	{
-		Debug.Log("disconnected in level1");
 	}
 }
