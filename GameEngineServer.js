@@ -23,7 +23,7 @@ public class GameEngineServer extends MonoBehaviour
     private var worldStateTimer : TimeInterval = null;
 
     //TODO GAME BALANCE
-    private var INFLUENCE_DIFFERENCE_EPSILON : float = 1.25;
+    private var INFLUENCE_DIFFERENCE_EPSILON : float = 3.0;
 
     public function Start()
     {
@@ -81,14 +81,6 @@ public class GameEngineServer extends MonoBehaviour
 
     public function Update()
     {
-        var averageRandom : float = 0;
-        for (var i : int = 0; i < 1000; i++)
-        {
-            averageRandom += rollValue();
-        }
-        Debug.Log(averageRandom / 1000.0);  //0.41
-
-        Debug.Log(averageRandom);
         if (Network.isServer)
         {
             if (checkAllPlayersConnected() && !hasControllersAll)
@@ -199,6 +191,9 @@ public class GameEngineServer extends MonoBehaviour
         rollNeededForSuccess = rollNeededForSuccess < 0 
                              ? 0 
                              : rollNeededForSuccess;
+        rollNeededForSuccess = rollNeededForSuccess > 0
+                             ? 1
+                             : rollNeededForSuccess;
         var roll : float = rollValue();
         Debug.Log("to influence: " + toInfluence);
         Debug.Log("from influence: " + fromInfluence);
@@ -245,6 +240,9 @@ public class GameEngineServer extends MonoBehaviour
         rollNeededForSuccess = rollNeededForSuccess < 0 
                              ? 0 
                              : rollNeededForSuccess;
+        rollNeededForSuccess = rollNeededForSuccess > 0
+                             ? 1
+                             : rollNeededForSuccess;
 
         var roll : float = rollValue();
         Debug.Log("to influence: " + toInfluence);
@@ -290,6 +288,6 @@ public class GameEngineServer extends MonoBehaviour
 
     private function rollValue() : float
     {
-        return Random.value * Random.value + (Random.value * 0.35);
+        return Random.value * Random.value + (Random.value * 0.25);
     }
 }
