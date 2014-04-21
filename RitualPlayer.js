@@ -3,6 +3,7 @@
 public class RitualPlayer
 {
     public var influences : ArtifactInfluence;
+    public var ritualLevel : int = 0;
     public var pointValues : Points;
     public var race : int;
     public var dead : boolean = false;

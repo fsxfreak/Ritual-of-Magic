@@ -132,6 +132,11 @@ public class PlayerMono extends MonoBehaviour
 
             hasShotInfluence = false;
         }
+
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            fireRitualShot();
+        }
     }
 
     private function waitForArtifactChosen()
@@ -393,6 +398,24 @@ public class PlayerMono extends MonoBehaviour
             rp.RULES_MARUS = rulesSorrell;
             rp.RULES_KIDA = rulesKida;
             rp.race = race;
+        }
+    }
+
+
+    private function fireRitualShot()
+    {
+        var camera : Transform = transform.Find("Main Camera");
+        var pos : Vector3 = camera.position;
+        var dir : Vector3 = camera.transform.forward;
+
+        var rayInfo : RaycastHit;
+        if (Physics.Raycast(pos, dir, rayInfo, 500.0))
+        {
+            var trans : Transform = rayInfo.transform;
+            if (trans.tag == "RitualArea")
+            {
+                
+            }
         }
     }
 

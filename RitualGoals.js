@@ -110,3 +110,25 @@ public static class Artifact
         return artifacts;
     }
 }
+
+public static class RitualType
+{
+    public var CANDLE : int = 1 << 7;   //values are NOT used in artifactMask
+    public var BELL : int   = 1 << 8;   //shifted in this way so cannot inadvertently
+    public var BOOK : int   = 1 << 9;   //cause confusion
+
+    public var RITUAL : int = CANDLE + BELL + BOOK;
+
+    public function translate(ritualType : int) : String
+    {
+        switch (ritualType)
+        {
+        case CANDLE:
+            return "candle";
+        case BELL:
+            return "bell";
+        case BOOK:
+            return "book";
+        }
+    }
+}
