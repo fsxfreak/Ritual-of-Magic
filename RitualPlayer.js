@@ -3,7 +3,7 @@
 public class RitualPlayer
 {
     public var influences : ArtifactInfluence;
-    public var ritualLevel : int = 0;
+    public var ritualLevel : float = 0.2; //TODO TEST
     public var pointValues : Points;
     public var race : int;
     public var dead : boolean = false;
@@ -44,6 +44,7 @@ public class RitualPlayer
             "Your race: " + Race.translate(race) + "\n"
           + "Controlled artifacts: " + Artifact.translateMask(influences.artifactMask) + "\n"
           + influences.stringify() + "\n"
+          + "Ritual level: " + ritualLevel + "\n"
           + "Score: " + calculateScore();
     }
 

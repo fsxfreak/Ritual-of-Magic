@@ -16,13 +16,15 @@ public class RitualItem extends MonoBehaviour
 	{
 		//TODO modify value according to strength
 		//sync by RPC
+		value += strength * Time.deltaTime * 0.02;
+		sync();	//might cause race issues, we'll see
 	}
 
 	public function influenceDirection(object : GameObject) : int
 	{
 		if (object.name == "positive")
 			return 1;
-		else if (object.name = "negative");
+		else if (object.name == "negative");
 			return -1;
 
 		return 0;

@@ -50,11 +50,16 @@ public class PlayerMono extends MonoBehaviour
                 canShootInfluence = true;
             else
                 canShootInfluence = false;
-
+            
             if (timedUpdateThis.check())
             {
                 updatePlayerStatus();
                 timedUpdateThis.start();
+            }
+
+            if (Input.GetKeyDown(KeyCode.V))
+            {
+                fireRitualShot();
             }            
         }     
     }
@@ -131,11 +136,6 @@ public class PlayerMono extends MonoBehaviour
                    , chosenArtifact);
 
             hasShotInfluence = false;
-        }
-
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            fireRitualShot();
         }
     }
 
@@ -414,7 +414,10 @@ public class PlayerMono extends MonoBehaviour
             var trans : Transform = rayInfo.transform;
             if (trans.tag == "RitualArea")
             {
-                
+                var direction : int = trans.parent.GetComponent(RitualItem)
+                    .influenceDirection(trans.gameObject);
+
+                trans.parent.GetComponent(RitualItem).influence(playerInfo.ritualLevel * direction);    
             }
         }
     }
