@@ -57,9 +57,12 @@ public class PlayerMono extends MonoBehaviour
                 timedUpdateThis.start();
             }
 
-            if (Input.GetKeyDown(KeyCode.V))
+            if (Input.GetKey(KeyCode.V) && playerInfo.ritualStrength > 0)
             {
                 fireRitualShot();
+                playerInfo.ritualStrength -= Time.deltaTime / 10;
+                if (playerInfo.ritualStrength < 0)
+                    playerInfo.ritualStrength = 0;
             }            
         }     
     }
@@ -104,6 +107,7 @@ public class PlayerMono extends MonoBehaviour
             gui.removeTextFromDisplay("goal");
         }
 
+        //refer to RitualGoals.js::Artifact::translate() for special behavior
         var translateArtifact : String = Artifact.translate(chosenArtifact);
         gui.setTextToDisplay("artifactMode"
                            , "Artifact mode: " + translateArtifact
@@ -115,7 +119,15 @@ public class PlayerMono extends MonoBehaviour
         if (collision.gameObject.tag == "InfluenceOrb")
         {
             var influence : float = collision.gameObject.GetComponent(InfluenceOrb).getInfluenceContained();
-            playerInfo.influences.addInfluenceFor(chosenArtifact, influence);
+            if (chosenArtifact & Artifact.ARTIFACT != 0)    //influence mode on artifact
+            {
+                playerInfo.influences.addInfluenceFor(chosenArtifact, influence);
+            }
+            else
+            {
+                playerInfo.ritualStrength += influence;
+            }
+
             Debug.Log("added influence for: " + Artifact.translate(chosenArtifact) + " " + influence);
             collision.gameObject.GetComponent(InfluenceOrb).disable();
         }
@@ -152,6 +164,10 @@ public class PlayerMono extends MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             chosenArtifact = Artifact.AMULET;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            chosenArtifact = RitualType.RITUAL;
         }
     }
 
@@ -417,7 +433,8 @@ public class PlayerMono extends MonoBehaviour
                 var direction : int = trans.parent.GetComponent(RitualItem)
                     .influenceDirection(trans.gameObject);
 
-                trans.parent.GetComponent(RitualItem).influence(playerInfo.ritualLevel * direction);    
+                trans.parent.GetComponent(RitualItem).influence(playerInfo.ritualLevel * direction);
+                Debug.Log("fired at RitualArea " + trans.parent.name);    
             }
         }
     }

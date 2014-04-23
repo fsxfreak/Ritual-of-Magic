@@ -4,6 +4,7 @@ public class RitualPlayer
 {
     public var influences : ArtifactInfluence;
     public var ritualLevel : float = 0.2; //TODO TEST
+    public var ritualStrength : float = 0.0; //in tens of seconds
     public var pointValues : Points;
     public var race : int;
     public var dead : boolean = false;
@@ -14,7 +15,6 @@ public class RitualPlayer
     public var RULES_MARUS             : boolean = false;
     public var RULES_KIDA              : boolean = false;
 
-    //should call hashWorldState() after setting this
     public var worldState : String = "";
     private var state : Hashtable = new Hashtable();
 
@@ -45,6 +45,7 @@ public class RitualPlayer
           + "Controlled artifacts: " + Artifact.translateMask(influences.artifactMask) + "\n"
           + influences.stringify() + "\n"
           + "Ritual level: " + ritualLevel + "\n"
+          + "Ritual influence: " + ritualStrength * 10 + "\n"
           + "Score: " + calculateScore();
     }
 
@@ -188,12 +189,29 @@ public class RitualPlayer
           ? "The " + state["RACE_CONTROLS_MONSTER"] + " controls the monster." + "\n"
           : "";
 
+        var ritualCandle : String = 
+            float.Parse(state["RITUAL_CANDLE"] as String) >= 0 ?
+                "Candle lit for: " + state["RITUAL_CANDLE"]
+              : "Candle doused for: " + state["RITUAL_CANDLE"];
+        var ritualBell : String = 
+            float.Parse(state["RITUAL_BELL"] as String) >= 0 ?
+                "Bell ringing for: " + state["RITUAL_BELL"]
+              : "Bell silent for: " + state["RITUAL_BELL"];
+        var ritualBook : String = 
+            float.Parse(state["RITUAL_BOOK"] as String) >= 0 ?
+                "Book open for: " + state["RITUAL_BOOK"]
+              : "Book closed for: " + state["RITUAL_BOOK"];      
+
+
         var beauty : String =
             raceSorrell
           + raceMarus
           + raceKida
           + raceMonster
-          + deadRacesString;
+          + deadRacesString + "\n"
+          + ritualCandle + "\n"
+          + ritualBell + "\n"
+          + ritualBook;
 
         return beauty;
     }

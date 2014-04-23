@@ -16,7 +16,7 @@ public class RitualItem extends MonoBehaviour
 	{
 		//TODO modify value according to strength
 		//sync by RPC
-		value += strength * Time.deltaTime * 0.02;
+		value += strength * Time.deltaTime * 0.45;
 		sync();	//might cause race issues, we'll see
 	}
 
@@ -32,6 +32,7 @@ public class RitualItem extends MonoBehaviour
 
 	public function sync()
 	{
+		Debug.Log(value);
 		networkView.RPC("syncThis", RPCMode.All, ritualType, value);
 	}
 

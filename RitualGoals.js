@@ -93,6 +93,8 @@ public static class Artifact
             return "scepter";
         case AMULET:
             return "amulet";
+        default:
+            return "ritual"; //im lazy sorry
         }
     }
 

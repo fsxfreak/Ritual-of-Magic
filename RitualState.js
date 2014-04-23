@@ -17,6 +17,10 @@ public class RitualState
     public static var NOBODY_DIES             : boolean = true;
     public static var MONSTER_RAMPAGES_COUNTRY: boolean = false;
 
+    public static var RITUAL_CANDLE : float = 0;
+    public static var RITUAL_BELL : float = 0;
+    public static var RITUAL_BOOK : float = 0;
+
     public static function updateRuling(statuses : Array)
     {
         for (var status : int in statuses)
@@ -85,7 +89,10 @@ public class RitualState
               + "MONSTER_BANISHED:" + MONSTER_BANISHED + ","
               + "AT_LEAST_ONE_COUNTRY_NO_RULER:" + AT_LEAST_ONE_COUNTRY_NO_RULER + ","
               + "NOBODY_DIES:" + NOBODY_DIES + ","
-              + "MONSTER_RAMPAGES_COUNTRY:" + MONSTER_RAMPAGES_COUNTRY;
+              + "MONSTER_RAMPAGES_COUNTRY:" + MONSTER_RAMPAGES_COUNTRY + ","
+              + "RITUAL_CANDLE:" + RITUAL_CANDLE + ","
+              + "RITUAL_BELL:" + RITUAL_BELL + ","
+              + "RITUAL_BOOK:" + RITUAL_BOOK;
 
         return state;
     }
