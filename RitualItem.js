@@ -1,5 +1,4 @@
 ﻿#pragma strict
-@RequireComponent(BoxCollider)
 @RequireComponent(NetworkView)
 
 public class RitualItem extends MonoBehaviour

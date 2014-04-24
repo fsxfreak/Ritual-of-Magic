@@ -137,15 +137,17 @@ public class GameEngineServer extends MonoBehaviour
 
             RitualState.updateRuling(statuses);
         }
+
+
     }
 
     private function initializePlayer() : GameObject
     {
         return Network.Instantiate(networkedObject 
                                  , Vector3(
-                                        Random.Range(4, 12),
-                                        6,
-                                        Random.Range(4, 12)
+                                        Random.Range(1230, 1265),
+                                        210,
+                                        Random.Range(1178, 1240)
                                    )
                                  , Quaternion()
                                  , 0

@@ -119,7 +119,9 @@ public class PlayerMono extends MonoBehaviour
         if (collision.gameObject.tag == "InfluenceOrb")
         {
             var influence : float = collision.gameObject.GetComponent(InfluenceOrb).getInfluenceContained();
-            if (chosenArtifact & Artifact.ARTIFACT != 0)    //influence mode on artifact
+            if (chosenArtifact == Artifact.AMULET
+             || chosenArtifact == Artifact.CROWN
+             || chosenArtifact == Artifact.SCEPTER)    //influence mode on artifact
             {
                 playerInfo.influences.addInfluenceFor(chosenArtifact, influence);
             }
