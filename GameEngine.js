@@ -24,9 +24,9 @@ public class GameEngine extends MonoBehaviour
 
             player = Network.Instantiate(networkedObject 
                                  , Vector3(
-                                        Random.Range(4, 12),
-                                        6,
-                                        Random.Range(4, 12)
+                                        Random.Range(1150, 1200),
+                                        250,
+                                        Random.Range(1178, 1240)
                                  )
                                  , Quaternion()
                                  , 0

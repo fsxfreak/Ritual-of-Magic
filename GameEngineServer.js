@@ -145,8 +145,8 @@ public class GameEngineServer extends MonoBehaviour
     {
         return Network.Instantiate(networkedObject 
                                  , Vector3(
-                                        Random.Range(1230, 1265),
-                                        210,
+                                        Random.Range(1150, 1200),
+                                        250,
                                         Random.Range(1178, 1240)
                                    )
                                  , Quaternion()
