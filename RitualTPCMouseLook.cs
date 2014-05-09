@@ -33,6 +33,9 @@ public class RitualTPCMouseLook : PivotBasedCameraRig
 
 	protected override void Awake ()
 	{
+		if (!networkView.isMine)
+			GameObject.Destroy(gameObject);
+
 		base.Awake();
 		// Lock or unlock the cursor.
 		Screen.lockCursor = lockCursor;
@@ -69,9 +72,6 @@ public class RitualTPCMouseLook : PivotBasedCameraRig
 	
 	void HandleRotationMovement()
 	{
-		if (!networkView.isMine)
-			return;
-
 		// Read the user input
 		#if CROSS_PLATFORM_INPUT
 		var x = CrossPlatformInput.GetAxis ("Mouse X");

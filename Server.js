@@ -3,8 +3,8 @@
 
 public class Server extends MonoBehaviour
 {
-	//private var serverIP : String = "10.2.5.210";
-	private var serverIP : String = "localhost";
+	private var serverIP : String = "10.2.5.210";
+	//private var serverIP : String = "localhost";
 	private var port : int = 25314;
 
 	private var startServerButton : GUITexture;

@@ -41,9 +41,6 @@ public class RitualTPCControl : MonoBehaviour {
 	// Fixed update is called in sync with physics
 	void FixedUpdate ()
 	{
-		if (!networkView.isMine)
-			return;
-
 		actionOne = Input.GetKey(KeyCode.Alpha1);			
 		actionTwo = Input.GetKey(KeyCode.Alpha2);
 		actionThree = Input.GetKey(KeyCode.Alpha3);
@@ -95,6 +92,19 @@ public class RitualTPCControl : MonoBehaviour {
 	                  : transform.position + transform.forward * 100;
 
 	    // pass all parameters to the character control script
+
+	    if (!networkView.isMine)
+		{
+			actionOne = false;			
+			actionTwo = false;
+			actionThree = false;
+			actionFour = false;
+
+			move = new Vector3();
+			crouch = false;
+			jump = false;
+			lookPos = new Vector3();
+		}
 
 		character.Move2( move, crouch, jump, lookPos, actionOne, actionTwo, actionThree, actionFour);
 	}

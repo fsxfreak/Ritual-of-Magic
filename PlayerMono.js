@@ -175,7 +175,7 @@ public class PlayerMono extends MonoBehaviour
 
     private function fireInfluenceShot()
     {
-        var camera : Transform = transform.Find("Main Camera");
+        var camera : Transform = transform.parent.GetChild(0).GetChild(0).GetChild(0);
         var pos : Vector3 = camera.position;
         var dir : Vector3 = camera.transform.forward;
 
