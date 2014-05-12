@@ -25,6 +25,9 @@ public class GameEngineServer extends MonoBehaviour
     //TODO GAME BALANCE
     private var INFLUENCE_DIFFERENCE_EPSILON : float = 3.0;
 
+    private var timerSecondsLeft : float = 600;
+    private var timerSecondsLeftInterval : TimeInterval = null;
+
     public function Start()
     {
         if (Network.isServer)
@@ -33,6 +36,8 @@ public class GameEngineServer extends MonoBehaviour
             players = new Hashtable();
             fpcPlayers = new Array();
             worldStateTimer = new TimeInterval(WORLD_STATE_UPDATE_INTERVAL);
+            timerSecondsLeftInterval = new TimeInterval(0.9);
+            timerSecondsLeftInterval.start();
 
             //label each player false if they have not connected yet
             for (var player : NetworkPlayer in Network.connections)
@@ -102,8 +107,9 @@ public class GameEngineServer extends MonoBehaviour
             {
                 RitualState.printStatus();
             }
+
+            updateTimer();
         }
-            
     }
 
     /**
@@ -291,5 +297,20 @@ public class GameEngineServer extends MonoBehaviour
     private function rollValue() : float
     {
         return Random.value * Random.value + (Random.value * 0.25);
+    }
+
+    private function updateTimer()
+    {
+        timerSecondsLeft -= Time.deltaTime;
+        var timeLeft : int = timerSecondsLeft;
+        var time : String = "";
+        time += timeLeft / 60;
+        time += ":";
+        time += timeLeft % 60;
+        
+        for (var player : GameObject in fpcPlayers)
+        {
+            player.networkView.RPC("allUpdateTimer", RPCMode.All, time);
+        }
     }
 }

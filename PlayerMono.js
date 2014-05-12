@@ -1,4 +1,4 @@
-﻿#pragma strict
+#pragma strict
 
 public class PlayerMono extends MonoBehaviour
 {
@@ -22,6 +22,7 @@ public class PlayerMono extends MonoBehaviour
 
     private var gui : PlayerGUI;
     private var timedUpdateThis : TimeInterval;
+    private var time : String;
 
     public function Awake()
     {
@@ -112,6 +113,10 @@ public class PlayerMono extends MonoBehaviour
         gui.setTextToDisplay("artifactMode"
                            , "Artifact mode: " + translateArtifact
                            , 0);
+
+        gui.setTextToDisplay("timer"
+                          , time
+                          , 0);
     }
 
     public function OnTriggerEnter(collision : Collider)
@@ -175,7 +180,7 @@ public class PlayerMono extends MonoBehaviour
 
     private function fireInfluenceShot()
     {
-        var camera : Transform = transform.parent.GetChild(0).GetChild(0).GetChild(0);
+        var camera : Transform = transform.parent.GetChild(0).GetChild(0).GetChild(0);  
         var pos : Vector3 = camera.position;
         var dir : Vector3 = camera.transform.forward;
 
@@ -439,6 +444,12 @@ public class PlayerMono extends MonoBehaviour
                 Debug.Log("fired at RitualArea " + trans.parent.name);    
             }
         }
+    }
+
+    @RPC
+    public function allUpdateTimer(time : String)
+    {
+        this.time = time;
     }
 
 }

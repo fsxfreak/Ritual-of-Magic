@@ -48,6 +48,14 @@ public class PlayerGUI extends MonoBehaviour
                            , PADDING
                            , artifactModeWidth
                            , artifactModeHeight));
+
+        var timerWidth = 150;
+        var timerHeight = 100;
+        textRegions.Add("timer"
+                      , Rect(150
+                           , 75
+                           , timerWidth
+                           , timerHeight));
     }
 
     public function setTextToDisplay(key : String, value : String, duration : float)
@@ -109,6 +117,12 @@ public class PlayerGUI extends MonoBehaviour
         if (textToDisplay.Contains("artifactMode"))
         {
             GUI.Label(textRegions["artifactMode"], textToDisplay["artifactMode"] as String);
+        }
+        if (textToDisplay.Contains("timer"))
+        {
+            var style : GUIStyle = new GUIStyle();
+            style.fontSize = 32;
+            GUI.Label(textRegions["timer"], textToDisplay["timer"] as String, style);
         }
     }
 
