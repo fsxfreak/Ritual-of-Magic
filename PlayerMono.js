@@ -117,6 +117,10 @@ public class PlayerMono extends MonoBehaviour
         gui.setTextToDisplay("timer"
                           , time
                           , 0);
+
+        gui.setTextToDisplay("score"
+                          , playerInfo.calculateScore().ToString()
+                          , 0);
     }
 
     public function OnTriggerEnter(collision : Collider)
@@ -137,6 +141,12 @@ public class PlayerMono extends MonoBehaviour
 
             Debug.Log("added influence for: " + Artifact.translate(chosenArtifact) + " " + influence);
             collision.gameObject.GetComponent(InfluenceOrb).disable();
+        }
+
+        if (collision.gameObject.tag == "Teleporter")
+        {
+            var destination : Transform = collision.transform.Find("destination");
+            transform.position = destination.position + Vector3(0, 3, 0);
         }
     }
 
@@ -232,7 +242,7 @@ public class PlayerMono extends MonoBehaviour
                 );
 
             crown.transform.parent = this.transform;
-            crown.transform.localPosition = Vector3(0, 0.825, 0);
+            crown.transform.localPosition = Vector3(0, 3, 0);
             crown.transform.localEulerAngles = Vector3(0, 0, 0);
 
             crown.GetComponent(NetworkedObject).name("crown");
@@ -252,7 +262,7 @@ public class PlayerMono extends MonoBehaviour
                 );
 
             scepter.transform.parent = this.transform;
-            scepter.transform.localPosition = Vector3(0.5, 1.35, 0);
+            scepter.transform.localPosition = Vector3(0.5, 3, 0);
             scepter.transform.localEulerAngles = Vector3(0, 90, 90);
 
             scepter.GetComponent(NetworkedObject).name("scepter");
@@ -272,7 +282,7 @@ public class PlayerMono extends MonoBehaviour
                 );
 
             amulet.transform.parent = this.transform;
-            amulet.transform.localPosition = Vector3(0, -0.25, 0.6);
+            amulet.transform.localPosition = Vector3(0, 3, 0.6);
             amulet.transform.localEulerAngles = Vector3(0, -90, -60);
 
             amulet.GetComponent(NetworkedObject).name("amulet");

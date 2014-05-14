@@ -56,6 +56,14 @@ public class PlayerGUI extends MonoBehaviour
                            , 75
                            , timerWidth
                            , timerHeight));
+
+        var scoreWidth = 100;
+        var scoreHeight = 24;
+        textRegions.Add("score"
+                     , Rect(150
+                          , 110
+                          , scoreWidth
+                          , scoreHeight));
     }
 
     public function setTextToDisplay(key : String, value : String, duration : float)
@@ -102,6 +110,8 @@ public class PlayerGUI extends MonoBehaviour
 
     public function OnGUI()
     {
+        var style : GUIStyle = new GUIStyle();
+        style.fontSize = 32;
         if (textToDisplay.Contains("goal"))
         {
             GUI.Label(textRegions["goal"], textToDisplay["goal"] as String);
@@ -120,9 +130,11 @@ public class PlayerGUI extends MonoBehaviour
         }
         if (textToDisplay.Contains("timer"))
         {
-            var style : GUIStyle = new GUIStyle();
-            style.fontSize = 32;
             GUI.Label(textRegions["timer"], textToDisplay["timer"] as String, style);
+        }
+        if (textToDisplay.Contains("score"))
+        {
+            GUI.Label(textRegions["score"], textToDisplay["score"] as String, style);
         }
     }
 
