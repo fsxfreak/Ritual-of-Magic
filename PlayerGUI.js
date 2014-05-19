@@ -2,6 +2,8 @@
 
 public class PlayerGUI extends MonoBehaviour
 {
+    public var fontMaterial : Material;
+
     private var textToDisplay : Hashtable = new Hashtable();
     private var timedTexts : Array = new Array();
     private var timedTextsTimes : Hashtable = new Hashtable();
@@ -64,6 +66,26 @@ public class PlayerGUI extends MonoBehaviour
                           , 110
                           , scoreWidth
                           , scoreHeight));
+
+        var crownWidth = 50;
+        var crownHeight = 24;
+        textRegions.Add("crownInfluence"
+                      , Rect(150
+                           , 215
+                           , crownWidth
+                           , crownHeight));
+
+        textRegions.Add("scepterInfluence"
+                      , Rect(150
+                           , 295
+                           , crownWidth
+                           , crownHeight));
+
+        textRegions.Add("amuletInfluence"
+                      , Rect(150
+                           , 405
+                           , crownWidth
+                           , crownHeight));
     }
 
     public function setTextToDisplay(key : String, value : String, duration : float)
@@ -135,6 +157,18 @@ public class PlayerGUI extends MonoBehaviour
         if (textToDisplay.Contains("score"))
         {
             GUI.Label(textRegions["score"], textToDisplay["score"] as String, style);
+        }
+        if (textToDisplay.Contains("crownInfluence"))
+        {
+            GUI.Label(textRegions["crownInfluence"], textToDisplay["crownInfluence"] as String, style);
+        }
+        if (textToDisplay.Contains("scepterInfluence"))
+        {
+            GUI.Label(textRegions["scepterInfluence"], textToDisplay["scepterInfluence"] as String, style);
+        }
+        if (textToDisplay.Contains("amuletInfluence"))
+        {
+            GUI.Label(textRegions["amuletInfluence"], textToDisplay["amuletInfluence"] as String, style);
         }
     }
 

@@ -119,7 +119,17 @@ public class PlayerMono extends MonoBehaviour
                           , 0);
 
         gui.setTextToDisplay("score"
-                          , playerInfo.calculateScore().ToString()
+                          , "Score: " + playerInfo.calculateScore().ToString()
+                          , 0);
+
+        gui.setTextToDisplay("crownInfluence"
+                          , playerInfo.influences.getInfluenceFor(Artifact.CROWN).ToString()
+                          , 0);
+        gui.setTextToDisplay("scepterInfluence"
+                          , playerInfo.influences.getInfluenceFor(Artifact.SCEPTER).ToString()
+                          , 0);
+        gui.setTextToDisplay("amuletInfluence"
+                          , playerInfo.influences.getInfluenceFor(Artifact.AMULET).ToString()
                           , 0);
     }
 
@@ -460,6 +470,12 @@ public class PlayerMono extends MonoBehaviour
     public function allUpdateTimer(time : String)
     {
         this.time = time;
+    }
+
+    @RPC
+    public function serverNotification(message : String)
+    {
+        gui.setTextToDisplay("notification", message, 5);
     }
 
 }

@@ -133,7 +133,8 @@ public class GameEngineServer extends MonoBehaviour
 
         for (var player : GameObject in players)
         {
-            var info : RitualPlayer = player.GetComponent(PlayerMono).getPlayerInfo();
+            var info : RitualPlayer = player.transform.GetChild(0).
+                GetComponent(PlayerMono).getPlayerInfo();
 
             var race : int = info.race;
             var artifactMask : int = info.influences.artifactMask;
@@ -311,6 +312,32 @@ public class GameEngineServer extends MonoBehaviour
         for (var player : GameObject in fpcPlayers)
         {
             player.networkView.RPC("allUpdateTimer", RPCMode.All, time);
+        }
+
+        if (timeLeft <= 0)
+            gameOver();
+    }
+
+    private function gameOver()
+    {
+        var winningPlayer : GameObject = null;
+        var maxScore : int = 0;
+
+        for (var player : GameObject in fpcPlayers)
+        {
+            var score : int = player.transform.GetChild(0).
+                GetComponent(PlayerMono).getPlayerInfo().calculateScore();
+            if (score > maxScore)
+            {
+                winningPlayer = player;
+                maxScore = score;
+            }
+        }
+
+        for (var player : GameObject in fpcPlayers)
+        {
+            player.networkView.RPC("serverNotification", RPCMode.All, 
+                winningPlayer.transform.GetChild(0).name + " has won with score " + maxScore);
         }
     }
 }
